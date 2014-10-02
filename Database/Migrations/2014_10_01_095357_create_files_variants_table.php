@@ -1,0 +1,41 @@
+<?php
+
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+class CreateFilesVariantsTable extends Migration
+{
+
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('files_variants', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name');
+            $table->string('url');
+            $table->string('slug');
+            $table->integer('width');
+            $table->integer('height');
+            $table->integer('size')->nullable();
+
+            $table->integer('file_variant_type_id')->unsigned()->nullable();
+            $table->foreign('file_variant_type_id')->references('id')->on('files_variants_types');
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::drop('files_variants');
+    }
+
+}
