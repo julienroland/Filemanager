@@ -2,8 +2,9 @@
     "name": "Filemanager",
     "alias": "filemanager",
     "description": "",
-    "keywords": [
-
-    ],
+    "keywords": [],
+    "require": {
+        "intervention/image": "2.*"
+    },
     "active": 1
 }

@@ -1,4 +1,7 @@
+@extends('filemanager::layout.layout')
 
-{!! Form::open(['route'=>'filemanager.upload']) !!}
+@section('fields')
 
-{{ Form::close() }}
+<input type="file" name="{{Config::get('filemanager::config.file_name')}}" id=""/>
+
+@stop
