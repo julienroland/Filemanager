@@ -13,7 +13,11 @@ class FilemanagerDatabaseSeeder extends Seeder {
 	public function run()
 	{
 		Model::unguard();
+
         $this->call("Modules\\Filemanager\\Database\\Seeders\\FilesVariantsTypesTableSeeder");
+        $this->call("Modules\\Filemanager\\Database\\Seeders\\FilesTypesTableSeeder");
+        $this->call("Modules\\Filemanager\\Database\\Seeders\\FilesAccessTypesTableSeeder");
+        $this->call("Modules\\Filemanager\\Database\\Seeders\\FilesPathsTableSeeder");
 
 	}
 

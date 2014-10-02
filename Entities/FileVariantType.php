@@ -3,4 +3,5 @@
 class  FileVariantType extends Model {
 
     protected $table = "files_variants_types";
+
 }

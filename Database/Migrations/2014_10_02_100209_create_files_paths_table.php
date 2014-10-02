@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateFilesVariantsTypesTable extends Migration {
+class CreateFilesPathsTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,13 +12,11 @@ class CreateFilesVariantsTypesTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('files_variants_types', function(Blueprint $table)
+		Schema::create('files_paths', function(Blueprint $table)
 		{
             $table->increments('id');
-            $table->string('name');
-            $table->string('slug');
-            $table->string('value')->nullable();
-            $table->string('prefix');
+            $table->string('local_path')->nullable();
+            $table->string('external_path')->nullable();
 
             $table->timestamps();
 		});
@@ -31,7 +29,7 @@ class CreateFilesVariantsTypesTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('files_variants_types');
+		Schema::drop('files');
 	}
 
 }
