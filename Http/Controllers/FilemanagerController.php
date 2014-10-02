@@ -11,6 +11,8 @@ use Modules\Filemanager\Repositories\FilemanagerControllerRepository;
 
 class FilemanagerController extends Controller
 {
+
+    protected $ajax = false;
     protected $mimes = [
         'image' => [
             'jpeg' => 'image/jpeg',
@@ -67,34 +69,42 @@ class FilemanagerController extends Controller
      * @var Redirect
      */
     private $redirect;
+    /**
+     * @var UploadRequest
+     */
+    private $request;
 
     /**
      * @param FilemanagerControllerRepository $filemanager
-     * @param Flash $flash
-     * @param Redirect $redirect
+     * @param FlashNotifier|Flash $flash
+     * @param Redirector|Redirect $redirect
+     * @param UploadRequest $request
      */
     public function __construct(
         FilemanagerControllerRepository $filemanager,
         FlashNotifier $flash,
-        Redirector $redirect
+        Redirector $redirect,
+        UploadRequest $request
     ) {
         $this->filemanager = $filemanager;
         $this->flash = $flash;
         $this->redirect = $redirect;
+        $this->request = $request;
     }
 
     /**
      * @param UploadRequest $request
      */
-    public
-    function upload(
-        UploadRequest $request
-    ) {
-        $input = $request->all();
+    public function upload()
+    {
 
-        $fileType = $this->findFileType($this->getFileinput($request));
+        if ($this->request->ajax()) {
 
-        $this->routeFileByType($input, $fileType);
+            $this->ajaxUpload();
+        }
+
+        $this->syncUpload();
+
     }
 
     /**
@@ -225,6 +235,10 @@ class FilemanagerController extends Controller
         return $request->file(Config::get('filemanager::config.file_name'));
     }
 
+    /**
+     * @param $file
+     * @return \Illuminate\Http\RedirectResponse
+     */
     private
     function move(
         $file
@@ -232,12 +246,19 @@ class FilemanagerController extends Controller
         return $this->response($this->moving($file));
     }
 
+    /**
+     * @return mixed
+     */
     private
     function getFilePath()
     {
         return $this->filemanager->getFilePath();
     }
 
+    /**
+     * @param $file
+     * @return mixed
+     */
     private
     function moving(
         $file
@@ -245,6 +266,10 @@ class FilemanagerController extends Controller
         return $file->move($this->getFilePath(), $file->getClientOriginalName());
     }
 
+    /**
+     * @param $response
+     * @return \Illuminate\Http\RedirectResponse
+     */
     private
     function response(
         $response
@@ -258,5 +283,35 @@ class FilemanagerController extends Controller
         $this->flash->error(trans('filemanager::upload.error'));
         return $this->redirect->back();
 
+    }
+
+    /**
+     *
+     */
+    private function ajaxUpload()
+    {
+        $this->setAjax(true);
+
+    }
+
+    /**
+     *
+     */
+    private function syncUpload()
+    {
+        $input = $this->request->all();
+
+        $fileType = $this->findFileType($this->getFileinput($this->request));
+
+        $this->routeFileByType($input, $fileType);
+    }
+
+    /**
+     * @param boolean $ajax
+     */
+    public function setAjax($ajax)
+    {
+        $this->ajax = $ajax;
+        dd('ajax upload');
     }
 }
