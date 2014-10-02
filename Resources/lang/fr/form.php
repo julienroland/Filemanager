@@ -1,4 +1,4 @@
 <?php return
-[
-    'upload'=>'Envoyer'
-];
+    [
+        'upload' => 'Envoyer'
+    ];

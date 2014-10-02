@@ -1,6 +1,9 @@
-<?php  namespace Modules\Filemanager\Entities; use Illuminate\Database\Eloquent\Model;
+<?php  namespace Modules\Filemanager\Entities;
 
-class  FileVariantType extends Model {
+use Illuminate\Database\Eloquent\Model;
+
+class  FileVariantType extends Model
+{
 
     protected $table = "files_variants_types";
 

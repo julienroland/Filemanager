@@ -1,6 +1,7 @@
 <?php namespace Modules\Filemanager\Repositories;
 
-interface FilemanagerControllerRepository{
+interface FilemanagerControllerRepository
+{
 
     public function getFilePath();
 
