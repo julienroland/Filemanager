@@ -1,7 +1,7 @@
 <?php namespace Modules\Filemanager\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Modules\Filemanager\Repositories\Eloquent\EloquentFilemanagerControllerRepository;
+
 
 class FilemanagerServiceProvider extends ServiceProvider
 {
@@ -20,6 +20,10 @@ class FilemanagerServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->app->bind('filemanager', function () {
+            return new Filemanager;
+        });
+
         $this->app->booted(function () {
             $this->registerBindings();
         });

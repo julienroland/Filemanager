@@ -6,6 +6,6 @@
 
 @section('content')
 
-@include('filemanager::upload')
+{{Filemanager::test()}}
 
 @stop

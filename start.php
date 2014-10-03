@@ -16,6 +16,7 @@ Lang::addNamespace('filemanager', __DIR__ . '/Resources/lang/');
 
 Config::addNamespace('filemanager', __DIR__ . '/Config/');
 
+
 /*
 |--------------------------------------------------------------------------
 | Require The Routes file.
