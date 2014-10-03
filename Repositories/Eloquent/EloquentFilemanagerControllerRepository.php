@@ -1,8 +1,8 @@
 <?php namespace Modules\Filemanager\Repositories\Eloquent;
 
-use Modules\Filemanager\Repositories\FilemanagerControllerRepository;
+use Modules\Filemanager\Repositories\FileUploadControllerRepository;
 
-class EloquentFilemanagerControllerRepository extends AbstractEloquentRepository implements FilemanagerControllerRepository
+class EloquentFileUploadControllerRepository extends AbstractEloquentRepository implements FileUploadControllerRepository
 {
 
 }

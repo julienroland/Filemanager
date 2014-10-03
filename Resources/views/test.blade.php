@@ -5,7 +5,11 @@
 @stop
 
 @section('content')
+{!! Form::open(['route'=>'test','files'=>true]) !!}
 
-{{Filemanager::upload()}}
+{{Upload::file()}}
+
+<input type="submit" value="{{trans('filemanager::form.upload')}}"/>
+
 
 @stop

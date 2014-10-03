@@ -2,12 +2,15 @@
 
 use Illuminate\Foundation\AliasLoader;
 use Illuminate\Support\ServiceProvider;
-use Modules\Filemanager\Filemanager\Filemanager;
-
-
+use Illuminate\Support\Str;
+use Modules\Filemanager\Filemanager\FileUpload;
+use Carbon\Carbon;
+use Illuminate\Config\Repository as Configuration;
+use Modules\Filemanager\Entities\File as FileModel;
+use Intervention\Image\ImageManager;
+use League\Flysystem\File;
 class FilemanagerServiceProvider extends ServiceProvider
 {
-
     /**
      * Indicates if loading of the provider is deferred.
      *
@@ -22,11 +25,11 @@ class FilemanagerServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind('filemanager', function () {
-            return new Filemanager;
+        $this->app->bind('fileupload', function () {
+            return new FileUpload(new File , new FileModel, new ImageManager, new Carbon, new Str);
         });
 
-        AliasLoader::getInstance()->alias('Filemanager', 'Modules\Filemanager\Facades\Filemanager');
+        AliasLoader::getInstance()->alias('Upload', 'Modules\Filemanager\Facades\FileUpload');
 
         $this->app->booted(function () {
             $this->registerBindings();
@@ -46,8 +49,12 @@ class FilemanagerServiceProvider extends ServiceProvider
     private function registerBindings()
     {
         $this->app->bind(
-            'Modules\Filemanager\Repositories\FilemanagerControllerRepository',
-            'Modules\Filemanager\Repositories\Eloquent\EloquentFilemanagerControllerRepository'
+            'Modules\Filemanager\Repositories\FileUploadControllerRepository',
+            'Modules\Filemanager\Repositories\Eloquent\EloquentFileUploadControllerRepository'
+        );
+        $this->app->bind(
+            'Modules\Filemanager\Repositories\FileRepository',
+            'Modules\Filemanager\Repositories\Eloquent\EloquentFileRepository'
         );
     }
 }

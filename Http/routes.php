@@ -1,25 +1,28 @@
 <?php
 
 Route::group(['prefix' => LaravelLocalization::setLocale(), 'before' => 'LaravelLocalizationRedirectFilter'],
-function () {
+    function () {
 
-    Route::group(['prefix' => 'filemanager', 'namespace' => 'Modules\Filemanager\Http\Controllers'], function () {
-        Route::get('/', function () {
-            return view('filemanager::test');
+        Route::group(['prefix' => 'filemanager', 'namespace' => 'Modules\Filemanager\Http\Controllers'], function () {
+
+            Route::get('/', function () {
+                return view('filemanager::test');
+            });
+
+            Route::post('/test', ['as' => 'test','uses'=>'TestController@create']);
+
+            /* Uploads */
+            Route::post('upload',
+                [
+                    'as' => Config::get('filemanager::config.module_name') . '.upload',
+                    'uses' => 'FileManagerController@upload'
+                ]);
+
+            Route::get('ajax/upload',
+                [
+                    'as' => Config::get('filemanager::config.module_name') . '.ajax.upload',
+                    'uses' => 'FileManagerController@upload'
+                ]);
+            /* End uploads */
         });
-
-        /* Uploads */
-        Route::post('upload',
-            [
-                'as' => Config::get('filemanager::config.module_name') . '.upload',
-                'uses' => 'FileManagerController@upload'
-            ]);
-
-        Route::get('ajax/upload',
-            [
-                'as' => Config::get('filemanager::config.module_name') . '.ajax.upload',
-                'uses' => 'FileManagerController@upload'
-            ]);
-        /* End uploads */
     });
-});
