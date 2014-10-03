@@ -1,6 +1,8 @@
 <?php namespace Modules\Filemanager\Providers;
 
+use Illuminate\Foundation\AliasLoader;
 use Illuminate\Support\ServiceProvider;
+use Modules\Filemanager\Filemanager\Filemanager;
 
 
 class FilemanagerServiceProvider extends ServiceProvider
@@ -23,6 +25,8 @@ class FilemanagerServiceProvider extends ServiceProvider
         $this->app->bind('filemanager', function () {
             return new Filemanager;
         });
+
+        AliasLoader::getInstance()->alias('Filemanager', 'Modules\Filemanager\Facades\Filemanager');
 
         $this->app->booted(function () {
             $this->registerBindings();
