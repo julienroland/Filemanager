@@ -1,14 +1,11 @@
 <?php namespace Modules\Filemanager\Providers;
 
 use Illuminate\Foundation\AliasLoader;
+use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Str;
-use Modules\Filemanager\Filemanager\FileUpload;
-use Carbon\Carbon;
-use Illuminate\Config\Repository as Configuration;
-use Modules\Filemanager\Entities\File as FileModel;
-use Intervention\Image\ImageManager;
-use League\Flysystem\File;
+use Modules\Filemanager\Filemanager\Form\OutputFileForm;
+use Modules\Filemanager\Filemanager\TemplateFileUpload;
+
 class FilemanagerServiceProvider extends ServiceProvider
 {
     /**
@@ -19,20 +16,29 @@ class FilemanagerServiceProvider extends ServiceProvider
     protected $defer = false;
 
     /**
+     * The filters base class name.
+     *
+     * @var array
+     */
+    protected $filters = [
+        'Core' => [
+            'permissions' => 'PermissionFilter'
+        ]
+    ];
+
+    /**
      * Register the service provider.
      *
      * @return void
      */
     public function register()
     {
-        $this->app->bind('fileupload', function () {
-            return new FileUpload(new File , new FileModel, new ImageManager, new Carbon, new Str);
-        });
-
-        AliasLoader::getInstance()->alias('Upload', 'Modules\Filemanager\Facades\FileUpload');
-
-        $this->app->booted(function () {
+        $this->app->booted(function ($app) {
+            $this->registerFilters($app['router']);
+            $this->bindFacade();
             $this->registerBindings();
+
+            AliasLoader::getInstance()->alias('Upload', 'Modules\Filemanager\Facades\TemplateFileUpload');
         });
     }
 
@@ -46,6 +52,20 @@ class FilemanagerServiceProvider extends ServiceProvider
         return array();
     }
 
+    /**
+     * @param Router $router
+     */
+    public function registerFilters(Router $router)
+    {
+        foreach ($this->filters as $module => $filters) {
+            foreach ($filters as $name => $filter) {
+                $class = "Modules\\{$module}\\Http\\Filters\\{$filter}";
+
+                $router->filter($name, $class);
+            }
+        }
+    }
+
     private function registerBindings()
     {
         $this->app->bind(
@@ -56,5 +76,18 @@ class FilemanagerServiceProvider extends ServiceProvider
             'Modules\Filemanager\Repositories\FileRepository',
             'Modules\Filemanager\Repositories\Eloquent\EloquentFileRepository'
         );
+        $this->app->bind(
+            'Modules\Filemanager\Repositories\ImageManipulationRepository',
+            'Modules\Filemanager\Repositories\ImageIntervention\ImageInterventionImageManipulationRepository'
+        );
+    }
+
+    private function bindFacade()
+    {
+        $this->app->bind('templatefileupload', function () {
+            return new TemplateFileUpload(
+                new OutputFileForm
+            );
+        });
     }
 }

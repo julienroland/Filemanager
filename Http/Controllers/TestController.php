@@ -23,7 +23,7 @@ class TestController extends Controller
         $file = $request->file(Config::get('filemanager::config.file_name'));
 
 
-        $this->filemanager->make($file)->resize(['width'=>100,'height'=>100])->save();
+        $this->filemanager->make($file)->resize(['width'=>100,'height'=>100,'ratio'=>true])->save();
 
 
     }

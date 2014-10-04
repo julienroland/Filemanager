@@ -4,10 +4,10 @@ namespace Modules\Filemanager\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
-class FileUpload extends Facade
+class TemplateFileUpload extends Facade
 {
     protected static function getFacadeAccessor()
     {
-        return 'fileupload';
+        return 'templatefileupload';
     }
 }

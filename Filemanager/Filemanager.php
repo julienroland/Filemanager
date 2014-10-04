@@ -2,17 +2,14 @@
 
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Config\Repository as Configuration;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Intervention\Image\Image;
 use Intervention\Image\ImageManager;
-use Modules\Filemanager\Entities\File as FileModel;
 use League\Flysystem\File as Fly;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 
-class FileManager extends FileForm
+class FileManager
 {
 
     private $image_quality = 100;
@@ -24,16 +21,16 @@ class FileManager extends FileForm
     /**
      * @var File
      */
-    private $file;
+    protected $file;
     /**
      * @var Image
      */
-    private $image;
+    public $image;
 
     /**
      * @var Carbon
      */
-    private $date;
+    protected $date;
     /**
      * @var Str
      */
@@ -41,27 +38,37 @@ class FileManager extends FileForm
     /**
      * @var FileManager
      */
-    private $fileManager;
+    protected $fileManager;
     /**
      * @var File
      */
-    private $fileModel;
+    protected $fileModel;
+    /**
+     * @var ImageManipulation
+     */
+    private $imageManipulation;
 
     /**
      * @param File|Fly $file
-     * @param File $fileModel
      * @param ImageManager $image
      * @param Carbon $date
      * @param Str $string
+     * @param ImageManipulation $imageManipulation
+     * @internal param File $fileModel
      * @internal param FileManager $fileManager
      */
-    public function __construct(Fly $file, FileModel $fileModel, ImageManager $image, Carbon $date, Str $string)
-    {
+    public function __construct(
+        Fly $file,
+        ImageManager $image,
+        Carbon $date,
+        Str $string,
+        ImageManipulation $imageManipulation
+    ) {
         $this->file = $file;
         $this->image = $image;
         $this->date = $date;
         $this->string = $string;
-        $this->fileModel = $fileModel;
+        $this->imageManipulation = $imageManipulation;
     }
 
 
@@ -73,39 +80,21 @@ class FileManager extends FileForm
 
     public function save()
     {
-        //dd($this->getImagePath() . $this->getImageFilename());
         $this->setToday();
-        $this->setImageFilename();
-        $this->fileModel->create($this->image);
-        $this->image->save($this->getImagePath() . $this->getImageFilename(), $this->image_quality);
+        $this->setSlug();
+        $imageUploaded = $this->image->save($this->getImagePath() . $this->getImageFilename(), $this->image_quality);
+        if ($imageUploaded) {
+            dd('Uploaded');
+        }
     }
 
     private function getImageFilename()
     {
-        return $this->slug;
+        return $this->image->slug;
     }
 
-    public function resize($options)
-    {
-        $image = $this->convertToImage($this->file);
 
-        $image->resize($options['width'], $options['width'], function ($constraint) use ($options) {
-
-            if (isset($options['ratio'])) {
-                $constraint->aspectRatio();
-            }
-
-            if (isset($options['upsize'])) {
-                $constraint->upsize();
-            }
-        });
-
-        $this->image = $image;
-        return $this;
-
-    }
-
-    private function convertToImage($file)
+    protected function convertToImage($file)
     {
         $this->image = $this->image->make($file);
         $this->image->name = $file->getClientOriginalName();
@@ -161,9 +150,40 @@ class FileManager extends FileForm
         return $destinationPath;
     }
 
-    private function setImageFilename()
+    private function setSlug()
     {
         $this->image->slug = $this->string->slug($this->getTimestamp() . ' ' . $this->getNameWithoutExtension()) . '.' . $this->image->extension;
+    }
+
+    protected function setImage($image)
+    {
+        $this->image = $image;
+
+    }
+
+    public function resize($options)
+    {
+        $this->isImage();
+        $this->setImage($this->imageManipulation->resize($this->image, $options));
+
+        return $this;
+    }
+
+    private function isImage()
+    {
+        $image = $this->convertToImage($this->file);
+        $this->setImage($image);
+    }
+
+    private function setAndGetImage($image)
+    {
+        $this->setImage($image);
+        return $this->getImage();
+    }
+
+    private function getImage()
+    {
+        return $this->image;
     }
 
 

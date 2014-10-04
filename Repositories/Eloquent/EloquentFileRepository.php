@@ -8,6 +8,6 @@ class EloquentFileRepository extends Model implements FileRepository
     public function createFile($file)
     {
         dd($file);
-        
+
     }
 }
