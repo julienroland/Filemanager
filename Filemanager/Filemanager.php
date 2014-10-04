@@ -4,7 +4,6 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
-use Intervention\Image\Image;
 use League\Flysystem\File as Fly;
 use Modules\Filemanager\Filemanager\Image\ImageManager;
 use Modules\Filemanager\Http\Requests\UploadRequest;
@@ -44,14 +43,6 @@ class FileManager
      * @var File
      */
     protected $fileModel;
-    /**
-     * @var ImageManipulation
-     */
-    private $imageManipulation;
-    /**
-     * @var FileProvider
-     */
-    private $fileProvider;
 
     /**
      * @param File|Fly $file
@@ -66,14 +57,12 @@ class FileManager
         Fly $file,
         ImageManager $image,
         Carbon $date,
-        Str $string,
-        ImageManipulation $imageManipulation
+        Str $string
     ) {
         $this->flyFile = $file;
         $this->image = $image;
         $this->date = $date;
         $this->string = $string;
-        $this->fileManipulation = $imageManipulation;
     }
 
 
@@ -99,7 +88,7 @@ class FileManager
             echo 'Uploaded';
         }
         //if ($filedatabased) {
-          //  echo 'Insert';
+        //  echo 'Insert';
         //}
     }
 
@@ -183,7 +172,7 @@ class FileManager
     public function resize($options)
     {
 
-        $this->setImage($this->fileManipulation->resize($this->file, $options));
+        $this->setImage($this->image->resize($this->file, $options));
 
         return $this;
     }

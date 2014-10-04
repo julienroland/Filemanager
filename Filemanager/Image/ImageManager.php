@@ -1,7 +1,7 @@
 <?php namespace Modules\Filemanager\Filemanager\Image;
 
-use Intervention\Image\ImageManager as ImageIntervention;
 use Modules\Filemanager\Filemanager\FileProvider;
+use Modules\Filemanager\Repositories\ImageManagerRepository;
 
 class ImageManager extends FileProvider
 {
@@ -10,10 +10,21 @@ class ImageManager extends FileProvider
      * @var ImageManager
      */
     private $image;
+    /**
+     * @var ImageManipulation
+     */
+    private $imageManipulation;
 
-    public function __construct(ImageIntervention $image)
-    {
+    /**
+     * @param ImageIntervention $image
+     * @param ImageManipulation $imageManipulation
+     */
+    public function __construct(
+        ImageManipulation $imageManipulation,
+        ImageManagerRepository $image
+    ) {
         $this->image = $image;
+        $this->imageManipulation = $imageManipulation;
     }
 
     public function make($file)
@@ -23,9 +34,10 @@ class ImageManager extends FileProvider
 
     public function save($file, $type)
     {
+
         if ($this->isDirectory($type)) {
 
-            return $file->save($this->getFileFullPath($file), $this->image_quality);
+            return $this->image->save($file, $this->getFileFullPath($file), $this->image_quality);
 
         } elseif ($this->isDatabase($type)) {
 
@@ -34,5 +46,9 @@ class ImageManager extends FileProvider
         }
     }
 
+    public function resize($file, $options)
+    {
+        return $this->imageManipulation->resize($file, $options);
+    }
 
 }

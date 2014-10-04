@@ -1,4 +1,4 @@
-<?php  namespace Modules\Filemanager\Filemanager;
+<?php  namespace Modules\Filemanager\Filemanager\Image;
 
 use Modules\Filemanager\Repositories\ImageManipulationRepository;
 

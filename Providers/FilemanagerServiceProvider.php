@@ -80,6 +80,10 @@ class FilemanagerServiceProvider extends ServiceProvider
             'Modules\Filemanager\Repositories\ImageManipulationRepository',
             'Modules\Filemanager\Repositories\ImageIntervention\ImageInterventionImageManipulationRepository'
         );
+        $this->app->bind(
+            'Modules\Filemanager\Repositories\ImageManagerRepository',
+            'Modules\Filemanager\Repositories\ImageIntervention\ImageInterventionImageManagerRepository'
+        );
     }
 
     private function bindFacade()
