@@ -6,4 +6,5 @@
     'image_name'=>'image_filemanager',
     'classes_names'=>'filemanager',
     'id_names'=>'filemanager',
+    'hidden_field_name'=>'type_filemanager',
 ];

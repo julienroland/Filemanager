@@ -5,15 +5,16 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Intervention\Image\Image;
-use Intervention\Image\ImageManager;
 use League\Flysystem\File as Fly;
+use Modules\Filemanager\Filemanager\Image\ImageManager;
+use Modules\Filemanager\Http\Requests\UploadRequest;
 
 
+/**
+ * @property mixed setFileFullPath
+ */
 class FileManager
 {
-
-    private $image_quality = 100;
-
     private $todayDate;
 
     private $folderPermissions = 0777;
@@ -47,6 +48,10 @@ class FileManager
      * @var ImageManipulation
      */
     private $imageManipulation;
+    /**
+     * @var FileProvider
+     */
+    private $fileProvider;
 
     /**
      * @param File|Fly $file
@@ -64,17 +69,21 @@ class FileManager
         Str $string,
         ImageManipulation $imageManipulation
     ) {
-        $this->file = $file;
+        $this->flyFile = $file;
         $this->image = $image;
         $this->date = $date;
         $this->string = $string;
-        $this->imageManipulation = $imageManipulation;
+        $this->fileManipulation = $imageManipulation;
     }
 
 
-    public function make($file)
+    public function make($fileOrRequest, $type = null)
     {
-        $this->file = $file;
+        if (!$this->isRequest($fileOrRequest)) {
+            $this->setFile($fileOrRequest);
+            $this->setFileType($type);
+        }
+        $this->changeToTypeFile();
         return $this;
     }
 
@@ -82,28 +91,39 @@ class FileManager
     {
         $this->setToday();
         $this->setSlug();
-        $imageUploaded = $this->image->save($this->getImagePath() . $this->getImageFilename(), $this->image_quality);
-        if ($imageUploaded) {
-            dd('Uploaded');
+        $this->setFileFullPath();
+        $fileUploaded = $this->fileSaveInFolder();
+        //$filedatabased = $this->fileSaveToDatabase();
+
+        if ($fileUploaded) {
+            echo 'Uploaded';
         }
+        //if ($filedatabased) {
+          //  echo 'Insert';
+        //}
     }
 
-    private function getImageFilename()
+    private function getFileFilename()
     {
-        return $this->image->slug;
+        return $this->file->slug;
     }
 
 
-    protected function convertToImage($file)
+    protected function convertToImage($file = null)
     {
-        $this->image = $this->image->make($file);
-        $this->image->name = $file->getClientOriginalName();
-        $this->image->extension = $file->getClientOriginalExtension();
-        return $this->image;
+        if (is_null($file)) {
+            $file = $this->getFile();
+        }
+
+        $this->file = $this->image->make($file);
+        $this->file->name = $file->getClientOriginalName();
+        $this->file->extension = $file->getClientOriginalExtension();
+
+        return $this->file;
     }
 
     //2014/02/28
-    private function getImagePath()
+    private function getFilePath()
     {
         $dateFolder = $this->getFormatFolder();
         return $this->getDirectory($this->getFolderDir() . '/' . $dateFolder);
@@ -139,7 +159,7 @@ class FileManager
 
     private function getNameWithoutExtension()
     {
-        return explode($this->image->extension, $this->image->name)[0];
+        return explode($this->file->extension, $this->file->name)[0];
     }
 
     private function getDirectory($destinationPath)
@@ -152,38 +172,106 @@ class FileManager
 
     private function setSlug()
     {
-        $this->image->slug = $this->string->slug($this->getTimestamp() . ' ' . $this->getNameWithoutExtension()) . '.' . $this->image->extension;
+        $this->file->slug = $this->string->slug($this->getTimestamp() . ' ' . $this->getNameWithoutExtension()) . '.' . $this->file->extension;
     }
 
     protected function setImage($image)
     {
-        $this->image = $image;
-
+        $this->file = $image;
     }
 
     public function resize($options)
     {
-        $this->isImage();
-        $this->setImage($this->imageManipulation->resize($this->image, $options));
+
+        $this->setImage($this->fileManipulation->resize($this->file, $options));
 
         return $this;
     }
 
-    private function isImage()
+    private function getFile()
     {
-        $image = $this->convertToImage($this->file);
-        $this->setImage($image);
+        return $this->file;
     }
 
-    private function setAndGetImage($image)
+    private function isRequest($fileOrRequest)
     {
-        $this->setImage($image);
-        return $this->getImage();
+        if ($fileOrRequest instanceof UploadRequest) {
+
+            if ($fileOrRequest->hasFile(Config::get('filemanager::config.file_name'))) {
+
+                $this->setFile($fileOrRequest->file(Config::get('filemanager::config.file_name')));
+
+                if ($fileOrRequest->has(Config::get('filemanager::config.hidden_field_name'))) {
+
+                    $this->setFileType($fileOrRequest->get(Config::get('filemanager::config.hidden_field_name')));
+                }
+
+                return true;
+            }
+
+            return false;
+        }
+
+        return false;
     }
 
-    private function getImage()
+    private function setFile($file)
     {
-        return $this->image;
+
+        $this->file = $file;
+    }
+
+    private function setFileType($type = null)
+    {
+        $this->type = !is_null($type) ? $type : 'file';
+    }
+
+    private function changeToTypeFile()
+    {
+        switch ($this->type) {
+            case 'file':
+                return $this->detectFileType();
+                break;
+            case 'image':
+                return $this->convertToImage();
+                break;
+        }
+    }
+
+    private function detectFileType()
+    {
+        //Todo: new class to check
+    }
+
+
+    private function fileSaveInFolder()
+    {
+        switch ($this->type) {
+            case 'file':
+                dd('save file');
+                break;
+            case 'image':
+                return $this->image->save($this->file, 'directory');
+                break;
+        }
+    }
+
+
+    private function fileSaveToDatabase()
+    {
+        switch ($this->type) {
+            case 'file':
+                dd('save file');
+                break;
+            case 'image':
+                return $this->image->save($this->file, 'database');
+                break;
+        }
+    }
+
+    private function setFileFullPath()
+    {
+        $this->file->fullPath = $this->getFilePath() . $this->getFileFilename();
     }
 
 

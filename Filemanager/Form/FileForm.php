@@ -10,11 +10,10 @@ class FileForm
      */
     private $fileTemplate;
 
-    public function __construct( Configuration $config = null){
+    public function __construct(Configuration $config = null)
+    {
         parent::__construct($config);
     }
-
-
 
     protected function tag()
     {
@@ -23,7 +22,17 @@ class FileForm
 
     protected function name()
     {
-        return 'name="' . Config::get('filemanager::config.file_name') . '"';
+        return $this->nameAttr() . Config::get('filemanager::config.file_name') ;
+    }
+
+    protected function nameAttr()
+    {
+        return 'name=';
+    }
+
+    protected function nameMultipleFile()
+    {
+        return $this->nameAttr() . Config::get('filemanager::config.file_name').'[]' ;
     }
 
     protected function type()
@@ -36,14 +45,9 @@ class FileForm
         return 'id="' . Config::get('filemanager::config.id_name') . '"';
     }
 
-    protected function nameMultipleFile()
-    {
-        return 'name="' . Config::get('filemanager::config.file_name') . '[]"';
-    }
-
     protected function classes()
     {
-        return 'class="'.Config::get('filemanager::config.classes_names').'"';
+        return 'class="' . Config::get('filemanager::config.classes_names') . '"';
     }
 
 

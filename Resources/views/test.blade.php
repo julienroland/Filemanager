@@ -7,7 +7,7 @@
 @section('content')
 {!! Form::open(['route'=>'test','files'=>true]) !!}
 
-{{Upload::file()}}
+{{Upload::image()}}
 
 <input type="submit" value="{{trans('filemanager::form.upload')}}"/>
 

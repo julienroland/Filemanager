@@ -263,6 +263,7 @@ class FilemanagerController extends Controller
     function moving(
         $file
     ) {
+        dd('ok');
         return $file->move($this->getFilePath(), $file->getClientOriginalName());
     }
 

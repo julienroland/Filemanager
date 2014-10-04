@@ -15,25 +15,26 @@ class OutputFileForm extends FileForm
     {
     }
 
-    public function createInputFile()
+    public function createInputFile($type)
     {
-
-        return $this->outputInputFileTemplate();
+        return $this->outputInputFileTemplate($type);
     }
 
-    public function createInputMultipleFile()
+    public function createInputMultipleFile($type)
     {
-        return $this->outputInputFileMultipleTemplate();
+        return $this->outputInputFileMultipleTemplate($type);
     }
 
-    protected function outputInputFileTemplate()
+    protected function outputInputFileTemplate($type)
     {
         echo $this->openTag() . $this->tag() . ' ' . $this->type() . ' ' . $this->name() . ' ' . $this->classes() . ' ' . $this->id() . ' ' . $this->closeTag();
+        echo $this->outputHiddenFieldTemplate($type);
     }
 
-    protected function outputInputFileMultipleTemplate()
+    protected function outputInputFileMultipleTemplate($type)
     {
         echo $this->openTag() . $this->tag() . ' ' . $this->type() . ' ' . $this->nameMultipleFile() . ' ' . $this->classes() . ' ' . $this->id() . ' ' . $this->closeTag();
+        echo $this->outputHiddenFieldTemplate($type);
     }
 
 
@@ -45,6 +46,11 @@ class OutputFileForm extends FileForm
     private function closeTag()
     {
         return '/>';
+    }
+
+    private function outputHiddenFieldTemplate($value)
+    {
+        return '<input type="hidden" '.$this->nameAttr().Config::get('filemanager::config.hidden_field_name'). ' value="' . $value . '"/>';
     }
 
 }

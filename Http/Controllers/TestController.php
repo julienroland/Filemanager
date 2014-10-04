@@ -20,10 +20,13 @@ class TestController extends Controller
 
     public function create(UploadRequest $request)
     {
-        $file = $request->file(Config::get('filemanager::config.file_name'));
+        //$file = $request->file(Config::get('filemanager::config.file_name'));
+        //$type = $request->get(Config::get('filemanager::config.hidden_field_name'));
 
-
-        $this->filemanager->make($file)->resize(['width'=>100,'height'=>100,'ratio'=>true])->save();
+        $this->filemanager
+            ->make($request)
+            ->resize(['width' => 100, 'height' => 100, 'ratio' => true])
+            ->save();
 
 
     }
