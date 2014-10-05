@@ -5,20 +5,20 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'before' => 'Laravel
 
         Route::group(['prefix' => 'filemanager', 'namespace' => 'Modules\Filemanager\Http\Controllers'], function () {
 
-            Route::get('/', function () {
+            get('/', function () {
                 return view('filemanager::test');
             });
 
-            Route::post('/test', ['as' => 'test','uses'=>'TestController@create']);
+            post('/test', ['as' => 'test', 'uses' => 'TestController@create']);
 
             /* Uploads */
-            Route::post('upload',
+            post('upload',
                 [
                     'as' => Config::get('filemanager::config.module_name') . '.upload',
                     'uses' => 'FileManagerController@upload'
                 ]);
 
-            Route::get('ajax/upload',
+            get('ajax/upload',
                 [
                     'as' => Config::get('filemanager::config.module_name') . '.ajax.upload',
                     'uses' => 'FileManagerController@upload'

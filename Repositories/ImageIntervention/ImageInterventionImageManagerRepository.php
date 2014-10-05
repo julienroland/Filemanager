@@ -14,7 +14,6 @@ class ImageInterventionImageManagerRepository implements ImageManagerRepository
      * @param ImageIntervention $image
      */
     public function __construct(ImageIntervention $image){
-
         $this->image = $image;
     }
     public function make($file)

@@ -1,10 +1,11 @@
 <?php  namespace Modules\Filemanager\Filemanager;
 
 use Carbon\Carbon;
+//use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
-use League\Flysystem\File as Fly;
+use Illuminate\Contracts\Filesystem\Factory as Filesystem;
 use Modules\Filemanager\Filemanager\Image\ImageManager;
 use Modules\Filemanager\Http\Requests\UploadRequest;
 
@@ -43,23 +44,29 @@ class FileManager
      * @var File
      */
     protected $fileModel;
+    /**
+     * @var Filesystem
+     */
+    private $filesystem;
 
     /**
      * @param File|Fly $file
      * @param ImageManager $image
      * @param Carbon $date
      * @param Str $string
-     * @param ImageManipulation $imageManipulation
+     * @param Filesystem $filesystem
+     * @internal param ImageManipulation $imageManipulation
      * @internal param File $fileModel
      * @internal param FileManager $fileManager
      */
     public function __construct(
-        Fly $file,
+        Filesystem $filesystem,
         ImageManager $image,
         Carbon $date,
-        Str $string
+        Str $string,
+        Filesystem $filesystem
     ) {
-        $this->flyFile = $file;
+        $this->filesystem = $filesystem;
         $this->image = $image;
         $this->date = $date;
         $this->string = $string;
@@ -92,9 +99,15 @@ class FileManager
         //}
     }
 
-    private function getFileFilename()
+    public function resize($options)
     {
-        return $this->file->slug;
+        $this->setImage($this->image->resize($this->file, $options));
+        return $this;
+    }
+
+    protected function setImage($image)
+    {
+        $this->file = $image;
     }
 
 
@@ -109,6 +122,12 @@ class FileManager
         $this->file->extension = $file->getClientOriginalExtension();
 
         return $this->file;
+    }
+
+
+    private function getFileFilename()
+    {
+        return $this->file->slug;
     }
 
     //2014/02/28
@@ -153,8 +172,7 @@ class FileManager
 
     private function getDirectory($destinationPath)
     {
-
-        File::exists($destinationPath) or File::makeDirectory($destinationPath, $this->folderPermissions, true, true);
+        $this->filesystem->disk('dropbox')->exists($destinationPath) or $this->filesystem->disk('local')->makeDirectory($destinationPath, $this->folderPermissions, true, true);
 
         return $destinationPath;
     }
@@ -164,18 +182,6 @@ class FileManager
         $this->file->slug = $this->string->slug($this->getTimestamp() . ' ' . $this->getNameWithoutExtension()) . '.' . $this->file->extension;
     }
 
-    protected function setImage($image)
-    {
-        $this->file = $image;
-    }
-
-    public function resize($options)
-    {
-
-        $this->setImage($this->image->resize($this->file, $options));
-
-        return $this;
-    }
 
     private function getFile()
     {
@@ -229,7 +235,7 @@ class FileManager
 
     private function detectFileType()
     {
-        //Todo: new class to check
+        //Todo: new class to check based on controller
     }
 
 
