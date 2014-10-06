@@ -178,10 +178,13 @@ class FileManager
             $this->flysystem->disk($this->getProvider())->exists($provider_path) or $this->flysystem->disk($this->getProvider())->makeDirectory($provider_path,
                 $this->folderPermissions, true, true);
 
-        }
-        $this->filesystem->exists($destinationPath) or $this->filesystem->makeDirectory($destinationPath,
-            $this->folderPermissions, true, true);
+            $this->filesystem->exists($destinationPath . $this->getProvider()) or $this->filesystem->makeDirectory($destinationPath . $this->getProvider(),
+                $this->folderPermissions, true, true);
 
+        } else {
+            $this->filesystem->exists($destinationPath) or $this->filesystem->makeDirectory($destinationPath,
+                $this->folderPermissions, true, true);
+        }
         return $destinationPath;
     }
 
@@ -278,7 +281,7 @@ class FileManager
     {
         return [
             'path' => $this->getFormatFolder(),
-            'pathfilename' => $this->getFormatFolder().$this->getFileFilename(),
+            'pathfilename' => $this->getFormatFolder() . $this->getFileFilename(),
             'fullPath' => $this->getFileFullPath(),
         ];
     }
@@ -290,7 +293,9 @@ class FileManager
 
     private function setFileFullPath()
     {
-        $this->file->fullPath = $this->getFilePath() . $this->getFileFilename();
+        $provider = isset($this->provider) ? $this->provider.'/' :'';
+        $fullpath = $this->getFilePath() . $provider .$this->getFileFilename();
+        $this->file->fullPath = $fullpath;
     }
 
     private function setFileFolders()
@@ -329,8 +334,10 @@ class FileManager
         return $this->file->dateFolder;
     }
 
-    private function getFileFolders()
+    private function getFilePathWithProvider($path, $provider)
     {
+        $pathExplode = explode($path['path'], $path['pathfilename']);
+        return $path['path'] . $provider . '/' . $pathExplode[1];
     }
 
 

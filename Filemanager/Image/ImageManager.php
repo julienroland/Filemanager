@@ -43,8 +43,8 @@ class ImageManager extends FileProvider
     {
         if ($this->isDirectory($type)) {
             if (!is_null($provider)) {
-                $image = $this->image->save($file, $this->getFileFullPath($file), $this->image_quality, $provider);
-
+                $image = $this->image->save($file, $this->getFileFullPath($file),
+                    $this->image_quality, $provider);
 
                 $this->filesystem->disk($provider)->put($path['pathfilename'], $image->encoded);
                 dd('Dropbox saved');
@@ -62,6 +62,12 @@ class ImageManager extends FileProvider
     public function resize($file, $options)
     {
         return $this->imageManipulation->resize($file, $options);
+    }
+
+    private function getFilePathWithProvider($path, $provider)
+    {
+        $pathExplode = explode($path['path'], $path['pathfilename']);
+        return $path['path'] . $provider . '/' . $pathExplode[1];
     }
 
 }
