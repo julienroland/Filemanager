@@ -11,30 +11,34 @@ class OutputFileForm extends FileForm
      */
     private $config;
 
-    public function __construct()
+    /**
+     * @param Configuration $config
+     */
+    public function __construct($config)
     {
+        $this->config = $config;
     }
 
-    public function createInputFile($type)
+    public function createInputFile($type, $type2 = null)
     {
-        return $this->outputInputFileTemplate($type);
+        return $this->outputInputFileTemplate($type, $type2);
     }
 
-    public function createInputMultipleFile($type)
+    public function createInputMultipleFile($type, $type2 = null)
     {
-        return $this->outputInputFileMultipleTemplate($type);
+        return $this->outputInputFileMultipleTemplate($type, $type2);
     }
 
-    protected function outputInputFileTemplate($type)
+    protected function outputInputFileTemplate($type, $type2)
     {
         echo $this->openTag() . $this->tag() . ' ' . $this->type() . ' ' . $this->name() . ' ' . $this->classes() . ' ' . $this->id() . ' ' . $this->closeTag();
-        echo $this->outputHiddenFieldTemplate($type);
+        echo $this->outputHiddenFieldTemplate($type, $type2);
     }
 
-    protected function outputInputFileMultipleTemplate($type)
+    protected function outputInputFileMultipleTemplate($type, $type2 = null)
     {
         echo $this->openTag() . $this->tag() . ' ' . $this->type() . ' ' . $this->nameMultipleFile() . ' ' . $this->classes() . ' ' . $this->id() . ' ' . $this->closeTag();
-        echo $this->outputHiddenFieldTemplate($type);
+        echo $this->outputHiddenFieldTemplate($type, $type2);
     }
 
 
@@ -48,9 +52,20 @@ class OutputFileForm extends FileForm
         return '/>';
     }
 
-    private function outputHiddenFieldTemplate($value)
+    private function outputHiddenFieldTemplate($value, $type = null)
     {
-        return '<input type="hidden" '.$this->nameAttr().Config::get('filemanager::config.hidden_field_name'). ' value="' . $value . '"/>';
+        $value = $this->createValueType($value, $type);
+
+        return '<input type="hidden" ' . $this->nameAttr() . $this->config->get('filemanager::config.hidden_field_name') . ' value="' . $value . '"/>';
+    }
+
+    private function createValueType($value, $type)
+    {
+        if (!is_null($type)) {
+            $value = $value . '::' . $type;
+        }
+
+        return $value;
     }
 
 }

@@ -1,11 +1,11 @@
 <?php  namespace Modules\Filemanager\Filemanager;
 
 use Carbon\Carbon;
-//use Illuminate\Filesystem\Filesystem;
+use Illuminate\Filesystem\Filesystem as Filesystem;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
-use Illuminate\Contracts\Filesystem\Factory as Filesystem;
+use Illuminate\Contracts\Filesystem\Factory as Flysystem;
 use Modules\Filemanager\Filemanager\Image\ImageManager;
 use Modules\Filemanager\Http\Requests\UploadRequest;
 
@@ -60,12 +60,13 @@ class FileManager
      * @internal param FileManager $fileManager
      */
     public function __construct(
+        Flysystem $flysystem,
         Filesystem $filesystem,
         ImageManager $image,
         Carbon $date,
-        Str $string,
-        Filesystem $filesystem
+        Str $string
     ) {
+        $this->flysystem = $flysystem;
         $this->filesystem = $filesystem;
         $this->image = $image;
         $this->date = $date;
@@ -134,7 +135,8 @@ class FileManager
     private function getFilePath()
     {
         $dateFolder = $this->getFormatFolder();
-        return $this->getDirectory($this->getFolderDir() . '/' . $dateFolder);
+        $this->setDateFolder($dateFolder);
+        return $this->getDirectory($this->getFolderDir() . '/' . $dateFolder, $dateFolder);
     }
 
     /**
@@ -170,9 +172,15 @@ class FileManager
         return explode($this->file->extension, $this->file->name)[0];
     }
 
-    private function getDirectory($destinationPath)
+    private function getDirectory($destinationPath, $provider_path)
     {
-        $this->filesystem->disk('dropbox')->exists($destinationPath) or $this->filesystem->disk('local')->makeDirectory($destinationPath, $this->folderPermissions, true, true);
+        if (isset($this->provider)) {
+            $this->flysystem->disk($this->getProvider())->exists($provider_path) or $this->flysystem->disk($this->getProvider())->makeDirectory($provider_path,
+                $this->folderPermissions, true, true);
+
+        }
+        $this->filesystem->exists($destinationPath) or $this->filesystem->makeDirectory($destinationPath,
+            $this->folderPermissions, true, true);
 
         return $destinationPath;
     }
@@ -223,6 +231,8 @@ class FileManager
 
     private function changeToTypeFile()
     {
+        $this->hasAProvider();
+
         switch ($this->type) {
             case 'file':
                 return $this->detectFileType();
@@ -246,7 +256,7 @@ class FileManager
                 dd('save file');
                 break;
             case 'image':
-                return $this->image->save($this->file, 'directory');
+                return $this->image->save($this->file, $this->getPath(), 'directory', $this->provider);
                 break;
         }
     }
@@ -264,9 +274,63 @@ class FileManager
         }
     }
 
+    private function getPath()
+    {
+        return [
+            'path' => $this->getFormatFolder(),
+            'pathfilename' => $this->getFormatFolder().$this->getFileFilename(),
+            'fullPath' => $this->getFileFullPath(),
+        ];
+    }
+
+    private function getFileFullPath()
+    {
+        return $this->file->fullPath;
+    }
+
     private function setFileFullPath()
     {
         $this->file->fullPath = $this->getFilePath() . $this->getFileFilename();
+    }
+
+    private function setFileFolders()
+    {
+        $this->file->folders = $this->getFileFolders();
+    }
+
+
+    private function hasAProvider()
+    {
+        $types = explode('::', $this->type);
+
+        if (isset($types[1])) {
+            $this->setFileType($types[1]);
+            $this->setProvider($types[0]);
+        }
+    }
+
+    private function setProvider($provider)
+    {
+        $this->provider = $provider;
+    }
+
+    private function getProvider()
+    {
+        return $this->provider;
+    }
+
+    private function setDateFolder($dateFolder)
+    {
+        $this->file->dateFolder = $dateFolder;
+    }
+
+    private function getDateFolder()
+    {
+        return $this->file->dateFolder;
+    }
+
+    private function getFileFolders()
+    {
     }
 
 

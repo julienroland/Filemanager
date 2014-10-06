@@ -35,7 +35,7 @@ class FilemanagerServiceProvider extends ServiceProvider
     {
         $this->app->booted(function ($app) {
             $this->registerFilters($app['router']);
-            $this->bindFacade();
+            $this->bindFacade($app);
             $this->registerBindings();
 
             AliasLoader::getInstance()->alias('Upload', 'Modules\Filemanager\Facades\TemplateFileUpload');
@@ -86,11 +86,11 @@ class FilemanagerServiceProvider extends ServiceProvider
         );
     }
 
-    private function bindFacade()
+    private function bindFacade($app)
     {
-        $this->app->bind('templatefileupload', function () {
+        $this->app->bind('templatefileupload', function () use ($app) {
             return new TemplateFileUpload(
-                new OutputFileForm
+                new OutputFileForm($app['config'])
             );
         });
     }

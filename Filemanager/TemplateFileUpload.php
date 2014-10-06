@@ -8,13 +8,16 @@ class TemplateFileUpload
      * @var FileManager
      */
     private $fileManager;
+    private $config;
 
     /**
+     * @param $config
      * @param OutputFileForm $outputFile
      */
     public function __construct(OutputFileForm $outputFile)
     {
         $this->outputFile = $outputFile;
+
     }
 
     public function file()
@@ -25,6 +28,16 @@ class TemplateFileUpload
     public function files()
     {
         return $this->outputFile->createInputMultipleFile('file');
+    }
+
+    public function dropbox($type)
+    {
+        return $this->outputFile->createInputFile('dropbox', $type);
+    }
+
+    public function dropboxes()
+    {
+        return $this->outputFile->createInputMultipleFile('dropbox');
     }
 
     public function image()

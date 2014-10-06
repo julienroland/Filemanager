@@ -10,7 +10,8 @@
         /* Flymanager drivers */
         'dropbox' => [
             'driver' => 'dropbox',
-            'token' => 'bhusgui80qxls2v',
+            'token' => 'vdwYTaCwYmEAAAAAAAAC-ZAnCMIo1qzJoONd6OtxPlntBKvKuakpk2BB5C5MJOPq',
+            'key' => 'sbjs6ax2h1dqg31',
             'app' => 'jagd@dogstudio'
         ],
     ];

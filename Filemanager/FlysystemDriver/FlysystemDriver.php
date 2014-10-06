@@ -15,9 +15,7 @@ class FlysystemDriver extends FilesystemManager
      */
     public function createDropboxDriver(array $config)
     {
-
         $client = new Client($config['token'], $config['app']);
-
         return $this->adapt(new Flysystem(
             new DropboxAdapter($client)
         ));

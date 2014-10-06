@@ -1,6 +1,7 @@
 <?php namespace Modules\Filemanager\Filemanager\Image;
 
 use Modules\Filemanager\Filemanager\FileProvider;
+use Illuminate\Contracts\Filesystem\Factory as Filesystem;
 use Modules\Filemanager\Repositories\ImageManagerRepository;
 
 class ImageManager extends FileProvider
@@ -14,6 +15,10 @@ class ImageManager extends FileProvider
      * @var ImageManipulation
      */
     private $imageManipulation;
+    /**
+     * @var Filesystem
+     */
+    private $filesystem;
 
     /**
      * @param ImageIntervention $image
@@ -21,10 +26,12 @@ class ImageManager extends FileProvider
      */
     public function __construct(
         ImageManipulation $imageManipulation,
-        ImageManagerRepository $image
+        ImageManagerRepository $image,
+        Filesystem $filesystem
     ) {
         $this->image = $image;
         $this->imageManipulation = $imageManipulation;
+        $this->filesystem = $filesystem;
     }
 
     public function make($file)
@@ -32,12 +39,18 @@ class ImageManager extends FileProvider
         return $this->image->make($file);
     }
 
-    public function save($file, $type)
+    public function save($file, $path, $type, $provider = null)
     {
-
         if ($this->isDirectory($type)) {
+            if (!is_null($provider)) {
+                $image = $this->image->save($file, $this->getFileFullPath($file), $this->image_quality, $provider);
 
-            return $this->image->save($file, $this->getFileFullPath($file), $this->image_quality);
+
+                $this->filesystem->disk($provider)->put($path['pathfilename'], $image->encoded);
+                dd('Dropbox saved');
+            } else {
+                return $this->image->save($file, $this->getFileFullPath($file), $this->image_quality, $provider);
+            }
 
         } elseif ($this->isDatabase($type)) {
 
