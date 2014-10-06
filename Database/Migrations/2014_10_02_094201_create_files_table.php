@@ -21,6 +21,7 @@ class CreateFilesTable extends Migration
             $table->string('extension');
             $table->string('mime');
             $table->string('url');
+            $table->string('virtual_url')->unique();
             $table->integer('width');
             $table->integer('height');
             $table->integer('size')->nullable();

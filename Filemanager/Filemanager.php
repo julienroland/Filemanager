@@ -90,7 +90,7 @@ class FileManager
         $this->setSlug();
         $this->setFileFullPath();
         $fileUploaded = $this->fileSaveInFolder();
-        //$filedatabased = $this->fileSaveToDatabase();
+        $filedatabased = $this->fileSaveToDatabase();
 
         if ($fileUploaded) {
             echo 'Uploaded';
@@ -190,6 +190,7 @@ class FileManager
 
     private function setSlug()
     {
+        $this->setTimestamp();
         $this->file->slug = $this->string->slug($this->getTimestamp() . ' ' . $this->getNameWithoutExtension()) . '.' . $this->file->extension;
     }
 
@@ -232,6 +233,11 @@ class FileManager
         $this->type = !is_null($type) ? $type : 'file';
     }
 
+    private function getFileType($type = null)
+    {
+        return $this->type;
+    }
+
     private function changeToTypeFile()
     {
         $this->hasAProvider();
@@ -254,6 +260,7 @@ class FileManager
 
     private function fileSaveInFolder()
     {
+        dd($this->type);
         switch ($this->type) {
             case 'file':
                 dd('save file');
@@ -272,7 +279,7 @@ class FileManager
                 dd('save file');
                 break;
             case 'image':
-                return $this->image->save($this->file, 'database');
+                return $this->image->save($this->file, $this->getPath(), 'database', $this->provider);
                 break;
         }
     }
@@ -281,6 +288,7 @@ class FileManager
     {
         return [
             'path' => $this->getFormatFolder(),
+            'virtual_path' => 'medias/'.$this->getFileType().'/'.$this->getFileFilename(),
             'pathfilename' => $this->getFormatFolder() . $this->getFileFilename(),
             'fullPath' => $this->getFileFullPath(),
         ];
@@ -293,8 +301,8 @@ class FileManager
 
     private function setFileFullPath()
     {
-        $provider = isset($this->provider) ? $this->provider.'/' :'';
-        $fullpath = $this->getFilePath() . $provider .$this->getFileFilename();
+        $provider = isset($this->provider) ? $this->provider . '/' : '';
+        $fullpath = $this->getFilePath() . $provider . $this->getFileFilename();
         $this->file->fullPath = $fullpath;
     }
 
@@ -338,6 +346,11 @@ class FileManager
     {
         $pathExplode = explode($path['path'], $path['pathfilename']);
         return $path['path'] . $provider . '/' . $pathExplode[1];
+    }
+
+    private function setTimestamp()
+    {
+        $this->file->timestamp = $this->getTimestamp();
     }
 
 

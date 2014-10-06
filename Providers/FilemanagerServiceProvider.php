@@ -77,6 +77,14 @@ class FilemanagerServiceProvider extends ServiceProvider
             'Modules\Filemanager\Repositories\Eloquent\EloquentFileRepository'
         );
         $this->app->bind(
+            'Modules\Filemanager\Repositories\FileTypeRepository',
+            'Modules\Filemanager\Repositories\Eloquent\EloquentFileTypeRepository'
+        );
+        $this->app->bind(
+            'Modules\Filemanager\Repositories\FileAccessTypeRepository',
+            'Modules\Filemanager\Repositories\Eloquent\EloquentFileAccessTypeRepository'
+        );
+        $this->app->bind(
             'Modules\Filemanager\Repositories\ImageManipulationRepository',
             'Modules\Filemanager\Repositories\ImageIntervention\ImageInterventionImageManipulationRepository'
         );
