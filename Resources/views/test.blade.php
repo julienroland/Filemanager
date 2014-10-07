@@ -5,9 +5,10 @@
 @stop
 
 @section('content')
+
 {!! Form::open(['route'=>'test','files'=>true]) !!}
 
-{{Upload::dropbox('image')}}
+{{Upload::image()}}
 
 <input type="submit" value="{{trans('filemanager::form.upload')}}"/>
 

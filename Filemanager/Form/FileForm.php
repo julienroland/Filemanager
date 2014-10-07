@@ -9,20 +9,35 @@ class FileForm
      * @var TemplateFileUpload
      */
     private $fileTemplate;
+    /**
+     * @var Configuration
+     */
+    private $config;
 
     public function __construct(Configuration $config = null)
     {
         parent::__construct($config);
+        $this->config = $config;
     }
 
-    protected function tag()
+    protected function inputTag()
     {
         return 'input';
     }
 
+    protected function buttonTag()
+    {
+        return 'button';
+    }
+
+    protected function tag($tag)
+    {
+        return $tag;
+    }
+
     protected function name()
     {
-        return $this->nameAttr() . Config::get('filemanager::config.file_name') ;
+        return $this->nameAttr() . Config::get('filemanager::config.file_name');
     }
 
     protected function nameAttr()
@@ -32,7 +47,7 @@ class FileForm
 
     protected function nameMultipleFile()
     {
-        return $this->nameAttr() . Config::get('filemanager::config.file_name').'[]' ;
+        return $this->nameAttr() . Config::get('filemanager::config.file_name') . '[]';
     }
 
     protected function type()
@@ -40,14 +55,21 @@ class FileForm
         return 'type="' . $this->type . '"';
     }
 
-    protected function id()
+    protected function id($id = null)
     {
-        return 'id="' . Config::get('filemanager::config.id_name') . '"';
+        $id = is_null($id) ? Config::get('filemanager::config.file_name') : $id;
+        return 'id="' . $id . '"';
     }
 
-    protected function classes()
+    protected function classes($class = null)
     {
-        return 'class="' . Config::get('filemanager::config.classes_names') . '"';
+        $class = is_null($class) ? Config::get('filemanager::config.classes_names') : $class;
+        return 'class="' . $class . '"';
+    }
+
+    public function multipleAttr()
+    {
+        return 'multiple';
     }
 
 

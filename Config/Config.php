@@ -7,11 +7,7 @@
         'classes_names' => 'filemanager',
         'id_names' => 'filemanager',
         'hidden_field_name' => 'type_filemanager',
-        /* Flymanager drivers */
-        'dropbox' => [
-            'driver' => 'dropbox',
-            'token' => 'vdwYTaCwYmEAAAAAAAAC-ZAnCMIo1qzJoONd6OtxPlntBKvKuakpk2BB5C5MJOPq',
-            'key' => 'sbjs6ax2h1dqg31',
-            'app' => 'jagd@dogstudio'
-        ],
+        'library_class' => 'filemanager_library',
+        'routes_library' => 'library',
+
     ];

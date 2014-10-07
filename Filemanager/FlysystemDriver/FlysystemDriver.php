@@ -30,7 +30,7 @@ class FlysystemDriver extends FilesystemManager
      */
     protected function getConfig($name)
     {
-        return $this->app['config']["filemanager::config.{$name}"];
+        return $this->app['config']['services'][$name];
         //return $this->app['config']["filesystems.disks.{$name}"];
 
     }

@@ -24,6 +24,11 @@ class OutputFileForm extends FileForm
         return $this->outputInputFileTemplate($type, $type2);
     }
 
+    public function createButtonLibrary($type, $type2 = null)
+    {
+        return $this->outputButtonLibraryTemplate($type, $type2);
+    }
+
     public function createInputMultipleFile($type, $type2 = null)
     {
         return $this->outputInputFileMultipleTemplate($type, $type2);
@@ -31,20 +36,30 @@ class OutputFileForm extends FileForm
 
     protected function outputInputFileTemplate($type, $type2)
     {
-        echo $this->openTag() . $this->tag() . ' ' . $this->type() . ' ' . $this->name() . ' ' . $this->classes() . ' ' . $this->id() . ' ' . $this->closeTag();
+        echo $this->openTag() . $this->inputTag() . ' ' . $this->type() . ' ' . $this->name() . ' ' . $this->classes('hidden') . ' ' . $this->id() . ' ' . $this->inlineCloseTag();
         echo $this->outputHiddenFieldTemplate($type, $type2);
     }
 
     protected function outputInputFileMultipleTemplate($type, $type2 = null)
     {
-        echo $this->openTag() . $this->tag() . ' ' . $this->type() . ' ' . $this->nameMultipleFile() . ' ' . $this->classes() . ' ' . $this->id() . ' ' . $this->closeTag();
+        echo $this->openTag() . $this->inputTag() . ' ' . $this->type() . ' ' . $this->nameMultipleFile() . ' ' . $this->classes() . ' ' . $this->id() . ' ' . $this->multipleAttr() . ' ' . $this->inlineCloseTag();
         echo $this->outputHiddenFieldTemplate($type, $type2);
     }
 
+    private function outputButtonLibraryTemplate($type, $type2)
+    {
+        echo $this->openTag() . $this->buttonTag() . ' ' . $this->classes($this->config->get('filemanager::config.library_class')) . ' ' . $this->id($this->config->get('filemanager::config.library_class')) . $this->closeTag() . trans('filemanager::form.upload') . $this->buttonCloseTag();
+        //echo $this->outputHiddenFieldTemplate($type, $type2);
+    }
 
     private function openTag()
     {
         return '<';
+    }
+
+    private function inlineCloseTag()
+    {
+        return '/>';
     }
 
     private function closeTag()
@@ -64,8 +79,18 @@ class OutputFileForm extends FileForm
         if (!is_null($type)) {
             $value = $value . '::' . $type;
         }
-
         return $value;
     }
+
+    private function value($trans)
+    {
+        return 'value="' . $trans . '"';
+    }
+
+    private function buttonCloseTag()
+    {
+        return '</button>';
+    }
+
 
 }

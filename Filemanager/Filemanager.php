@@ -118,8 +118,9 @@ class FileManager
         if (is_null($file)) {
             $file = $this->getFile();
         }
-
+        $type = $this->file->type;
         $this->file = $this->image->make($file);
+        $this->file->type = $type;
         $this->file->name = $file->getClientOriginalName();
         $this->file->extension = $file->getClientOriginalExtension();
 
@@ -231,6 +232,7 @@ class FileManager
 
     private function setFileType($type = null)
     {
+
         $this->file->type = !is_null($type) ? $type : 'file';
     }
 
@@ -261,7 +263,6 @@ class FileManager
 
     private function fileSaveInFolder()
     {
-        dd($this->file->type);
         switch ($this->file->type) {
             case 'file':
                 dd('save file');
@@ -289,7 +290,7 @@ class FileManager
     {
         return [
             'path' => $this->getFormatFolder(),
-            'virtual_path' => 'medias/'.$this->getFileType().'/'.$this->getFileFilename(),
+            'virtual_path' => 'medias/' . $this->getFileType() . '/' . $this->getFileFilename(),
             'pathfilename' => $this->getFormatFolder() . $this->getFileFilename(),
             'fullPath' => $this->getFileFullPath(),
         ];

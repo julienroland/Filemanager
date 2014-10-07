@@ -5,7 +5,6 @@ use Modules\Filemanager\Repositories\FileRepository;
 
 class File
 {
-    protected $table = "files";
 
     /**
      * @var
@@ -20,6 +19,11 @@ class File
     public function create($file)
     {
         return $this->file->createFile($file);
+    }
+
+    public function getFiles()
+    {
+        return $this->file->getFiles();
     }
 
 }
