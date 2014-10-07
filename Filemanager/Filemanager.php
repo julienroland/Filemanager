@@ -76,7 +76,8 @@ class FileManager
 
     public function make($fileOrRequest, $type = null)
     {
-        if (!$this->isRequest($fileOrRequest)) {
+
+        if (!$this->isRequestAndSetFile($fileOrRequest)) {
             $this->setFile($fileOrRequest);
             $this->setFileType($type);
         }
@@ -200,7 +201,7 @@ class FileManager
         return $this->file;
     }
 
-    private function isRequest($fileOrRequest)
+    private function isRequestAndSetFile($fileOrRequest)
     {
         if ($fileOrRequest instanceof UploadRequest) {
 
@@ -230,19 +231,19 @@ class FileManager
 
     private function setFileType($type = null)
     {
-        $this->type = !is_null($type) ? $type : 'file';
+        $this->file->type = !is_null($type) ? $type : 'file';
     }
 
     private function getFileType($type = null)
     {
-        return $this->type;
+        return $this->file->type;
     }
 
     private function changeToTypeFile()
     {
         $this->hasAProvider();
 
-        switch ($this->type) {
+        switch ($this->file->type) {
             case 'file':
                 return $this->detectFileType();
                 break;
@@ -260,8 +261,8 @@ class FileManager
 
     private function fileSaveInFolder()
     {
-        dd($this->type);
-        switch ($this->type) {
+        dd($this->file->type);
+        switch ($this->file->type) {
             case 'file':
                 dd('save file');
                 break;
@@ -274,7 +275,7 @@ class FileManager
 
     private function fileSaveToDatabase()
     {
-        switch ($this->type) {
+        switch ($this->file->type) {
             case 'file':
                 dd('save file');
                 break;
@@ -314,7 +315,7 @@ class FileManager
 
     private function hasAProvider()
     {
-        $types = explode('::', $this->type);
+        $types = explode('::', $this->file->type);
 
         if (isset($types[1])) {
             $this->setFileType($types[1]);
