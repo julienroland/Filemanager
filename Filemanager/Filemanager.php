@@ -168,12 +168,11 @@ class FileManager
 
     private function getTimestamp()
     {
-        return $this->todayDate->toTimeString();
+        return $this->todayDate->timestamp;
     }
 
     private function getNameWithoutExtension()
     {
-        dd($this->file);
         return explode($this->file->extension, $this->file->name)[0];
     }
 
@@ -215,7 +214,6 @@ class FileManager
             if ($fileOrRequest->hasFile(Config::get('filemanager::config.file_name'))) {
                 $file = $fileOrRequest->file(Config::get('filemanager::config.file_name'));
                 $this->setFile($file);
-                dd($file);
 
                 if ($fileOrRequest->has(Config::get('filemanager::config.hidden_field_name'))) {
 
@@ -326,10 +324,11 @@ class FileManager
         $types = explode('::', $this->file->type);
         if (isset($types[1])) {
             $this->setFileType($types[1]);
+            $this->setProvider($types[0]);
         } else {
-            $this->setFileType(null);
+            $this->setFileType($types[0]);
+            $this->setProvider(null);
         }
-        $this->setProvider($types[0]);
     }
 
     private function setProvider($provider)
@@ -370,7 +369,9 @@ class FileManager
 
     private function setName()
     {
-        $this->file->name = $this->file->getClientOriginalName();
+        dd($this->file);
+        $this->file->name = isset($this->file->name) ? $this->file->name : $this->file->getClientOriginalName();
+
     }
 
 
