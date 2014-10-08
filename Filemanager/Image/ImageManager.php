@@ -60,12 +60,14 @@ class ImageManager extends FileProvider
             } else {
                 $fileUploaded = $this->saveImageFolder($file, $provider);
             }
-
         } elseif ($this->isDatabase($type)) {
+
             if (!is_null($provider)) {
+                $this->saveProviderImageDatabase($file, $path, $provider);
+            } else {
                 $this->saveImageDatabase($file, $path, $provider);
             }
-           // dd('save to db');
+            dd('save to db');
 
         }
     }
@@ -93,6 +95,23 @@ class ImageManager extends FileProvider
     }
 
     private function saveImageDatabase($file, $path, $provider)
+    {
+        $this->database->create($file, $path, $provider);
+
+        /*   'name' =>$file->name,
+            'group' =>,
+            'slug' =>$file->slug,
+            'extension' =>$file->extension,
+            'mime' =>$file->mime,
+            'url' =>$path['pathfilename'],
+            'width' =>$file->width(),
+            'height' =>$file->height(),
+            'size' =>,
+            'timestamp' =>$file->timestamp,
+            'external_url' =>,*/
+    }
+
+    private function saveProviderImageDatabase($file, $path, $provider)
     {
 
         $this->database->create($file, $path, $provider);

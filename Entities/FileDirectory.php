@@ -2,8 +2,7 @@
 
 use Illuminate\Database\Eloquent\Model;
 
-class  FileVariantType extends Model
+class FileDirectory extends Model
 {
-    protected $table = "files_variants_types";
-
+    protected $table = "files_directories";
 }

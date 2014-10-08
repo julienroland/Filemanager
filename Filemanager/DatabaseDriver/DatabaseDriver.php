@@ -31,12 +31,12 @@ class DatabaseDriver
      * @param Sentinel $auth
      */
     public function __construct(
-        FileRepository $database,
+        FileRepository $file,
         FileAccessTypeRepository $fileAccessType,
         FileTypeRepository $fileType,
         Sentinel $auth
     ) {
-        $this->database = $database;
+        $this->file = $file;
         $this->fileAccessType = $fileAccessType;
         $this->fileType = $fileType;
         $this->auth = $auth;
@@ -58,8 +58,8 @@ class DatabaseDriver
     */
     public function create($file, $path, $provider)
     {
-        dd($file);
-        $this->database->create([
+        $user = $this->auth->check() ? $this->auth->check()->id : null;
+        $this->file->create([
             'name' => $file->name,
             'group' => null,
             'slug' => $file->slug,
@@ -73,7 +73,7 @@ class DatabaseDriver
             'timestamp' => $file->timestamp,
             'external_url' => null,
             'file_access_type_id' => $this->getAccessType($provider),
-            'user_id' => $this->auth->check()->id,
+            'user_id' => $user,
             'file_type_id' => $this->getFileType($file->type),
         ]);
 
@@ -86,6 +86,9 @@ class DatabaseDriver
         switch ($provider) {
             case 'dropbox':
                 return $this->fileAccessType->getIdByName('http');
+                break;
+            case null:
+                return $this->fileAccessType->getIdByName('local');
                 break;
         }
     }

@@ -1,14 +1,13 @@
 <?php  namespace Modules\Filemanager\Repositories\Eloquent;
 
-use Illuminate\Database\Eloquent\Model;
+use Modules\Filemanager\Entities\FileType;
 use Modules\Filemanager\Repositories\FileTypeRepository;
 
-class EloquentFileTypeRepository extends Model implements FileTypeRepository
+class EloquentFileTypeRepository implements FileTypeRepository
 {
 
     public function getIdByName($name)
     {
-        return $this->where('name', $type)->pluck('id');
-
+        return FileType::where('name', $name)->pluck('id');
     }
 }

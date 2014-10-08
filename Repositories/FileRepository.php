@@ -3,7 +3,7 @@
 interface FileRepository
 {
 
-    public function createFile($file);
+    public function create($file);
 
-    public function getFiles();
+    public function all();
 }

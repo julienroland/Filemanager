@@ -10,13 +10,14 @@ class FileController extends Controller
      */
     private $file;
 
-    public function __construct(FileRepository $file){
-
+    public function __construct(FileRepository $file)
+    {
         $this->file = $file;
     }
+
     public function outputLibrary()
     {
-        $files = $this->file->getFiles();
+        $files = $this->file->all();
         return view('filemanager::popup.library')
             ->with(compact('files'));
     }

@@ -3,27 +3,25 @@
 use Illuminate\Database\Eloquent\Model;
 use Modules\Filemanager\Repositories\FileRepository;
 
-class File
+class File extends Model
 {
-
-    /**
-     * @var
-     */
-    private $file;
-
-    public function __construct(FileRepository $file)
-    {
-        $this->file = $file;
-    }
-
-    public function create($file)
-    {
-        return $this->file->createFile($file);
-    }
-
-    public function getFiles()
-    {
-        return $this->file->getFiles();
-    }
+    protected $fillable = [
+        'name',
+        'group',
+        'slug',
+        'extension',
+        'mime',
+        'url',
+        'virtual_url',
+        'width',
+        'height',
+        'size',
+        'timestamp',
+        'external_url',
+        'file_variant_id',
+        'file_access_type_id',
+        'user_id',
+        'file_type_id',
+    ];
 
 }

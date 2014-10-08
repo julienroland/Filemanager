@@ -76,8 +76,6 @@ class FileManager
 
     public function make($fileOrRequest, $type = null)
     {
-
-
         if (!$this->isRequestAndSetFile($fileOrRequest)) {
             $this->setFile($fileOrRequest);
             $this->setFileType($type);
@@ -98,9 +96,9 @@ class FileManager
         if ($fileUploaded) {
             echo 'Uploaded';
         }
-        //if ($filedatabased) {
-        //  echo 'Insert';
-        //}
+        if ($filedatabased) {
+            echo 'Insert';
+        }
     }
 
     public function resize($options)
@@ -364,7 +362,7 @@ class FileManager
 
     private function setExtension()
     {
-        $this->file->extension = isset($this->file->extension) ? $this->file->extension  : $this->file->guessExtension();
+        $this->file->extension = isset($this->file->extension) ? $this->file->extension : $this->file->guessExtension();
     }
 
     private function setName()

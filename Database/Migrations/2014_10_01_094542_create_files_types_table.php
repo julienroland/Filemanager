@@ -16,6 +16,7 @@ class CreateFilesTypesTable extends Migration
         Schema::create('files_types', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
+            $table->string('icon');
             $table->string('context')->nullable();
 
             $table->timestamps();

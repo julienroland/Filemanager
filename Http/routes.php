@@ -31,6 +31,15 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'before' => 'Laravel
                         'as' => Config::get('filemanager::config.module_name') . '.ajax.upload',
                         'uses' => 'FilemanagerController@upload'
                     ]);
+
+                get('ajax/getTranslation', [
+                    'uses' => 'TranslationController@all'
+                ]);
+
+                get('ajax/folder/create', [
+                    'uses' => 'DirectoryController@create'
+                ]);
+
                 /* End uploads */
             });
     });

@@ -1,22 +1,22 @@
 <?php  namespace Modules\Filemanager\Repositories\Eloquent;
 
-use Illuminate\Database\Eloquent\Model;
+use Modules\Filemanager\Entities\File;
 use Modules\Filemanager\Repositories\FileRepository;
 
-class EloquentFileRepository extends Model implements FileRepository
+class EloquentFileRepository implements FileRepository
 {
-    protected $table = "files";
 
-
-    public function createFile($file)
+    public function create($file)
     {
-        dd($file);
+        $file = File::create($file);
+
+        return $file;
 
     }
 
-    public function getFiles()
+    public function all()
     {
-        $files = EloquentFileRepository::all();
+        $files = File::all();
 
         return $files;
     }
