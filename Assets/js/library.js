@@ -135,6 +135,7 @@
             dataType: 'json',
             data: {'name': oLang.library.folder.default_name},
             success: function (oData) {
+                var edit = true;
                 var folder = $(displayFolder(oData));
                 console.log(folder);
                 finder.append(folder);
@@ -144,8 +145,9 @@
                     displayInputFolderName($(this));
                 });
                 folder.find('input.name').on('keypress', function (e) {
-                    if (e.which == 13) {
+                    if (e.which == 13 && edit == true) {
                         displayInputFolderName($(this));
+                        edit = false;
                     }
                 });
                 folder.find('input.name').on('change', function () {
