@@ -59,7 +59,7 @@ class DatabaseDriver
     public function create($file, $path, $provider)
     {
         $user = $this->auth->check() ? $this->auth->check()->id : null;
-        $this->file->create([
+        $file = $this->file->create([
             'name' => $file->name,
             'group' => null,
             'slug' => $file->slug,
@@ -76,8 +76,8 @@ class DatabaseDriver
             'user_id' => $user,
             'file_type_id' => $this->getFileType($file->type),
         ]);
+        return $file;
 
-        dd('Databased');
 
     }
 

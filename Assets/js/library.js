@@ -7,6 +7,7 @@
         foldersName = $('.folder div.name'),
         foldersInput = $('.folder input.name'),
         folders = [],
+        files = [],
 
         filesName = $('.file div.name'),
         filesInput = $('.file input.name'),
@@ -41,6 +42,8 @@
             dataType: 'json',
             done: function (e, oData) {
                 console.log(oData);
+                //je return pas d'obj pour recup la file
+                displayFile(oData);
             }
         });
 
@@ -96,6 +99,20 @@
     }
     var hiddenInputAndShowName = function () {
         $(this).toggleClass('hidden');
+    }
+    var displayFile = function (oData) {
+        if (oData !== "undefined") {
+            files.push(file);
+
+            var file = {};
+            file.id = oData.id;
+            file.name = oData.name;
+            file.fileType.icon = oData.fileType.icon;
+
+            var file_output = '<div class="file" data-id="{{$file->id}}"><div class="icon"><a href="javascript:void(0)"><img src="{{$file->fileType->icon}}" alt=""/></a> </div> <div class="name">{{$file->name}} </div> <input type="text" data-request="edit_file_name" class="name hidden" value="{{$file->name}}"/> </div>';
+
+            return file_output;
+        }
     }
     var displayFolder = function (oData) {
         if (oData !== "undefined") {

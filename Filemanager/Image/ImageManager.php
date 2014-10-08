@@ -65,10 +65,8 @@ class ImageManager extends FileProvider
             if (!is_null($provider)) {
                 $this->saveProviderImageDatabase($file, $path, $provider);
             } else {
-                $this->saveImageDatabase($file, $path, $provider);
+                return $this->saveImageDatabase($file, $path, $provider);
             }
-            dd('save to db');
-
         }
     }
 
