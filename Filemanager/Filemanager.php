@@ -364,12 +364,11 @@ class FileManager
 
     private function setExtension()
     {
-        $this->file->extension = $this->file->guessExtension();
+        $this->file->extension = isset($this->file->extension) ? $this->file->extension  : $this->file->guessExtension();
     }
 
     private function setName()
     {
-        dd($this->file);
         $this->file->name = isset($this->file->name) ? $this->file->name : $this->file->getClientOriginalName();
 
     }

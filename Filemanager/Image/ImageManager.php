@@ -46,7 +46,7 @@ class ImageManager extends FileProvider
 
     public function save($file, $path, $type, $provider = null)
     {
-        dd($provider);
+
         if ($this->isDirectory($type)) {
             if (!is_null($provider)) {
                 try {
@@ -58,7 +58,7 @@ class ImageManager extends FileProvider
                 }
                 //dd('Dropbox saved');
             } else {
-                //return $this->image->save($file, $this->getFileFullPath($file), $this->image_quality, $provider);
+                $fileUploaded = $this->saveImageFolder($file, $provider);
             }
 
         } elseif ($this->isDatabase($type)) {
