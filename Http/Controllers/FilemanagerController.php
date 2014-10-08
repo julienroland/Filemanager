@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Response;
 use Intervention\Image\Facades\Image;
 use Laracasts\Flash\FlashNotifier;
+use Modules\Filemanager\Filemanager\FileManager;
 use Modules\Filemanager\Http\Requests\UploadRequest;
 use Modules\Filemanager\Http\Requests\AjaxUploadRequest;
 
@@ -77,6 +78,10 @@ class FilemanagerController extends Controller
      * @var AjaxUploadRequest
      */
     private $ajaxRequest;
+    /**
+     * @var ImageManager
+     */
+    private $image;
 
     /**
      * @param FilemanagerControllerRepository $filemanager
@@ -88,12 +93,14 @@ class FilemanagerController extends Controller
         FlashNotifier $flash,
         Redirector $redirect,
         UploadRequest $request,
-        AjaxUploadRequest $ajaxRequest
+        AjaxUploadRequest $ajaxRequest,
+        FileManager $file
     ) {
         $this->flash = $flash;
         $this->redirect = $redirect;
         $this->request = $request;
         $this->ajaxRequest = $ajaxRequest;
+        $this->file = $file;
     }
 
 
@@ -109,6 +116,17 @@ class FilemanagerController extends Controller
         }
 
         $this->syncUpload();
+
+    }
+
+    private function ajaxUpload()
+    {
+        $this->setAjax(true);
+        //faire la requete ajax
+        //dd($this->ajaxRequest->all());
+        $file = $this->ajaxRequest->file(Config::get('filemanager::config.file_name'));
+        $type = $this->findFileType($file);
+        $this->file->make($file, $type)->save();
 
     }
 
@@ -288,18 +306,6 @@ class FilemanagerController extends Controller
 
         $this->flash->error(trans('filemanager::upload.error'));
         return $this->redirect->back();
-
-    }
-
-    /**
-     * @param AjaxUploadRequest $request
-     */
-    private function ajaxUpload()
-    {
-        $this->setAjax(true);
-        //faire la requete ajax
-        dd($this->ajaxRequest->all());
-        dd($this->ajaxRequest->has(Config::get('filemanager::config.file_name')));
 
     }
 

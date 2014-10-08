@@ -77,11 +77,13 @@ class FileManager
     public function make($fileOrRequest, $type = null)
     {
 
+
         if (!$this->isRequestAndSetFile($fileOrRequest)) {
             $this->setFile($fileOrRequest);
             $this->setFileType($type);
         }
         $this->changeToTypeFile();
+        $this->hasAProvider();
         return $this;
     }
 
@@ -171,6 +173,7 @@ class FileManager
 
     private function getNameWithoutExtension()
     {
+        dd($this->file);
         return explode($this->file->extension, $this->file->name)[0];
     }
 
@@ -193,6 +196,8 @@ class FileManager
     private function setSlug()
     {
         $this->setTimestamp();
+        $this->setName();
+        $this->setExtension();
         $this->file->slug = $this->string->slug($this->getTimestamp() . ' ' . $this->getNameWithoutExtension()) . '.' . $this->file->extension;
     }
 
@@ -204,11 +209,13 @@ class FileManager
 
     private function isRequestAndSetFile($fileOrRequest)
     {
+
         if ($fileOrRequest instanceof UploadRequest) {
 
             if ($fileOrRequest->hasFile(Config::get('filemanager::config.file_name'))) {
-
-                $this->setFile($fileOrRequest->file(Config::get('filemanager::config.file_name')));
+                $file = $fileOrRequest->file(Config::get('filemanager::config.file_name'));
+                $this->setFile($file);
+                dd($file);
 
                 if ($fileOrRequest->has(Config::get('filemanager::config.hidden_field_name'))) {
 
@@ -244,7 +251,6 @@ class FileManager
     private function changeToTypeFile()
     {
         $this->hasAProvider();
-
         switch ($this->file->type) {
             case 'file':
                 return $this->detectFileType();
@@ -263,6 +269,7 @@ class FileManager
 
     private function fileSaveInFolder()
     {
+
         switch ($this->file->type) {
             case 'file':
                 dd('save file');
@@ -317,11 +324,12 @@ class FileManager
     private function hasAProvider()
     {
         $types = explode('::', $this->file->type);
-
         if (isset($types[1])) {
             $this->setFileType($types[1]);
-            $this->setProvider($types[0]);
+        } else {
+            $this->setFileType(null);
         }
+        $this->setProvider($types[0]);
     }
 
     private function setProvider($provider)
@@ -353,6 +361,16 @@ class FileManager
     private function setTimestamp()
     {
         $this->file->timestamp = $this->getTimestamp();
+    }
+
+    private function setExtension()
+    {
+        $this->file->extension = $this->file->guessExtension();
+    }
+
+    private function setName()
+    {
+        $this->file->name = $this->file->getClientOriginalName();
     }
 
 

@@ -46,6 +46,7 @@ class ImageManager extends FileProvider
 
     public function save($file, $path, $type, $provider = null)
     {
+        dd($provider);
         if ($this->isDirectory($type)) {
             if (!is_null($provider)) {
                 try {
