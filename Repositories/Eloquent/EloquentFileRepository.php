@@ -1,6 +1,7 @@
 <?php  namespace Modules\Filemanager\Repositories\Eloquent;
 
 use Modules\Filemanager\Entities\File;
+use Modules\Filemanager\Entities\FileDirectory;
 use Modules\Filemanager\Entities\FileType;
 use Modules\Filemanager\Repositories\FileRepository;
 
@@ -29,5 +30,16 @@ class EloquentFileRepository implements FileRepository
         $file->save();
 
         return $file;
+    }
+
+    public function append($file_id, $folder_id)
+    {
+        $dir = FileDirectory::find($folder_id);
+        $file = File::find($file_id);
+
+        $res = $dir->file()->attach($file);
+
+        return $res;
+
     }
 }

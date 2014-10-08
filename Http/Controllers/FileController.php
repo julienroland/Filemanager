@@ -35,4 +35,10 @@ class FileController extends Controller
     {
         return $this->file->update($id, $request);
     }
+
+    public function append($file_id, $folder_id)
+    {
+        return $this->file->append($file_id, $folder_id);
+    }
+
 }

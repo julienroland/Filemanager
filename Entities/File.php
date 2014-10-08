@@ -31,4 +31,9 @@ class File extends Model
         return $this->belongsTo('Modules\Filemanager\Entities\FileType');
     }
 
+    public function fileDirectory()
+    {
+        return $this->belongsToMany('Modules\Filemanager\Entities\FileDirectory','files_files_directories');
+    }
+
 }

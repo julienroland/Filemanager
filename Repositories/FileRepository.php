@@ -8,4 +8,6 @@ interface FileRepository
     public function all();
 
     public function update($id, $request);
+
+    public function append($file_id, $folder_id);
 }
