@@ -15,7 +15,7 @@ class CreateFilesDirectoriesTable extends Migration {
 		Schema::create('files_directories', function(Blueprint $table)
 		{
             $table->increments('id');
-            $table->string('name')->unique();
+            $table->string('name');
 
             $table->timestamps();
 		});

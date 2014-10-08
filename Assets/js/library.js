@@ -4,8 +4,8 @@
         file = $('#file_filemanager'),
         button_file = $('#filemanager_library'),
         finder = $('#folder_finder'),
-        foldersName = $('#folder').find('div.name'),
-        foldersInput = $('#folder').find('input.name'),
+        foldersName = $('#folder div.name'),
+        foldersInput = $('#folder input.name'),
         folders = [],
         folderList = $('#folder'),
         nav_link = $('#filemanager_library-popup .navigation a');
@@ -48,7 +48,7 @@
             folder.icon = null;
 
             folders.push(folder);
-            var folder_output = '<div id="folder" data-id="' + folder.id + '"> <div class="icon"> <a href="javascript:void(0)" data-request="open_folder"> <img src="http://placehold.it/60x60" alt="' + oLang.library.Folder + '"/> </a> </div> <div class="name">' + oLang.library.folder.default_name + ' </div><input type="text" data-request="edit_folder_name" class="name hidden" value="' + oLang.library.folder.default_name + '"/> </div>';
+            var folder_output = '<div id="folder" data-id="' + folder.id + '"> <div class="icon"> <a href="javascript:void(0)" data-request="open_folder"> <img src="/modules/filemanager/images/folder_icon.png" alt="' + oLang.library.Folder + '"/> </a> </div> <div class="name">' + oLang.library.folder.default_name + ' </div><input type="text" data-request="edit_folder_name" class="name hidden" value="' + oLang.library.folder.default_name + '"/> </div>';
 
             return folder_output;
 
@@ -61,7 +61,7 @@
     }
     var refreshFolderNameValue = function ($that) {
         if ($that === "undefined") {
-            $that = $(this);
+            var $that = $(this);
         }
         var data = {'name': $that.val()};
         $.ajax({
@@ -84,6 +84,7 @@
                 folder.find('input.name').removeClass('hidden').focus();
                 folder.find('input.name').on('blur', hiddenInputAndShowName);
                 folder.find('input.name').on('change', refreshFolderNameValue);
+                folder.find('input.name').on('dblclick', editFolderName);
             }
         });
     }

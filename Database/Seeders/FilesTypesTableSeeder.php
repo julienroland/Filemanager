@@ -3,6 +3,7 @@
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
 use Modules\Filemanager\Entities\FileType;
+use Pingpong\Modules\Facades\Module;
 
 class FilesTypesTableSeeder extends Seeder
 {
@@ -20,11 +21,14 @@ class FilesTypesTableSeeder extends Seeder
             [
                 'name' => 'image',
                 'context' => null,
+                'icon' => Module::asset('filemanager', 'images/image_icon.png'),
             ],
             [
                 'name' => 'pdf',
                 'context' => null,
+                'icon' => Module::asset('filemanager', 'images/pdf_icon.png'),
             ],
+
         ];
         foreach ($data as $fileType) {
 
