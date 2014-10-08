@@ -5,4 +5,6 @@ use Illuminate\Database\Eloquent\Model;
 class FileDirectory extends Model
 {
     protected $table = "files_directories";
+
+    protected $fillable = ['name'];
 }

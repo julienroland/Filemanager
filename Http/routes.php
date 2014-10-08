@@ -40,6 +40,10 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'before' => 'Laravel
                     'uses' => 'DirectoryController@create'
                 ]);
 
+                get('ajax/folder/update/{id}', [
+                    'uses' => 'DirectoryController@update'
+                ]);
+
                 /* End uploads */
             });
     });

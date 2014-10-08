@@ -14,19 +14,14 @@
 </nav>
 
 <div class="folder_finder" id="folder_finder">
+@foreach($directories as $directory)
+
+<div id="folder" data-id="{{$directory->id}}"> <div class="icon"> <a href="javascript:void(0)" data-request="open_folder"> <img src="http://placehold.it/60x60" alt="{{trans('filemanager::library.Folder')}}"/> </a> </div> <div class="name">{{!is_null($directory->name) ? $directory->name : trans('filemanager::library.folder.default_name')}} </div><input type="text" data-request="edit_folder_name" class="name hidden" value="{{!is_null($directory->name) ? $directory->name : trans('filemanager::library.folder.default_name')}}"/> </div>
+@endforeach
     @foreach($files as $file)
            {{$file->name}}
     @endforeach
-    <div id="folder">
-    <div class="icon">
-    <a href="javascript:void(0)" data-request="open_folder">
-    <img src="http://placehold.it/60x60" alt="{{trans('filemanager::library.Folder')}}"/>
-    </a>
-    </div>
-    <div class="name">
-    {{trans('filemanager::library.folder.default_name')}}
-    </div>
-    </div>
+
 </div>
 </div>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>

@@ -1,5 +1,6 @@
 <?php  namespace Modules\Filemanager\Http\Controllers;
 
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Modules\Filemanager\Repositories\FileDirectoryRepository;
 
@@ -15,8 +16,13 @@ class DirectoryController extends Controller
         $this->directory = $directory;
     }
 
-    public function create($data = array())
+    public function create(Request $request)
     {
-        return $this->directory->create($data);
+        return $this->directory->create($request->get('name'));
+    }
+
+    public function update($id, Request $request)
+    {
+        return $this->directory->update($id, $request);
     }
 }
