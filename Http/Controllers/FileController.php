@@ -1,5 +1,6 @@
 <?php namespace Modules\Filemanager\Http\Controllers;
 
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Modules\Filemanager\Repositories\FileDirectoryRepository;
 use Modules\Filemanager\Repositories\FileRepository;
@@ -24,8 +25,14 @@ class FileController extends Controller
     public function outputLibrary()
     {
         $files = $this->file->all();
+
         $directories = $this->directory->all();
         return view('filemanager::popup.library')
             ->with(compact('files', 'directories'));
+    }
+
+    public function update($id, Request $request)
+    {
+        return $this->file->update($id, $request);
     }
 }

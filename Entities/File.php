@@ -1,10 +1,12 @@
 <?php  namespace Modules\Filemanager\Entities;
 
 use Illuminate\Database\Eloquent\Model;
-use Modules\Filemanager\Repositories\FileRepository;
+use Modules\Filemanager\Entities\FileType;
 
 class File extends Model
 {
+    protected $table = "files";
+
     protected $fillable = [
         'name',
         'group',
@@ -23,5 +25,10 @@ class File extends Model
         'user_id',
         'file_type_id',
     ];
+
+    public function fileType()
+    {
+        return $this->belongsTo('Modules\Filemanager\Entities\FileType');
+    }
 
 }

@@ -128,7 +128,7 @@ class FilemanagerController extends Controller
         $type = $this->findFileType($file);
         $this->file->make($file, $type)->save();
 
-        return 'ok'
+        return 'ok';
 
     }
 

@@ -44,6 +44,10 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'before' => 'Laravel
                     'uses' => 'DirectoryController@update'
                 ]);
 
+                get('ajax/file/update/{id}', [
+                    'uses' => 'FileController@update'
+                ]);
+
                 /* End uploads */
             });
     });

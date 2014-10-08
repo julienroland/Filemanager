@@ -7,6 +7,9 @@
         foldersName = $('#folder div.name'),
         foldersInput = $('#folder input.name'),
         folders = [],
+
+        filesName = $('#file div.name'),
+        filesInput = $('#file input.name'),
         folderList = $('#folder'),
         nav_link = $('#filemanager_library-popup .navigation a');
 
@@ -17,6 +20,9 @@
         foldersInput.on('blur', editFolderName);
         foldersName.on('dblclick', editFolderName);
 
+        filesName.on('dblclick', editFileName);
+        filesInput.on('blur', editFileName);
+
         file.fileupload({
             url: 'ajax/upload',
             dataType: 'json',
@@ -26,6 +32,22 @@
         });
 
     });
+    var editFileName = function (e) {
+        e.preventDefault();
+        console.log($(this));
+        displayInputFileName($(this));
+    }
+    var displayInputFileName = function ($that) {
+        $that.parent().find('input.name').toggleClass('hidden');
+        $that.parent().find('div.name').toggleClass('hidden');
+
+        refreshHtmlFileNameValue($that);
+    }
+    var refreshHtmlFileNameValue = function ($that) {
+        refreshFileNameValue($that);
+        $that.parent().find('div.name').html($that.parent().find('input.name').val());
+    }
+
     var editFolderName = function (e) {
         e.preventDefault();
         console.log($(this));
@@ -36,6 +58,19 @@
         $that.parent().find('div.name').toggleClass('hidden');
 
         refreshHtmlFolderNameValue($that);
+    }
+    var refreshFileNameValue = function ($that) {
+        if ($that === "undefined") {
+            var $that = $(this);
+        }
+        var data = {'name': $that.val()};
+        $.ajax({
+            url: 'ajax/file/update/' + $that.parents('#file').attr('data-id'),
+            data: data,
+            success: function (oData) {
+                console.log(oData);
+            }
+        });
     }
     var hiddenInputAndShowName = function () {
         $(this).toggleClass('hidden');

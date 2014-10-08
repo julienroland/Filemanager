@@ -21,12 +21,12 @@ class FilesTypesTableSeeder extends Seeder
             [
                 'name' => 'image',
                 'context' => null,
-                'icon' => Module::asset('filemanager', 'images/image_icon.png'),
+                'icon' => '/modules/filemanager/images/image_icon.png',
             ],
             [
                 'name' => 'pdf',
                 'context' => null,
-                'icon' => Module::asset('filemanager', 'images/pdf_icon.png'),
+                'icon' => '/modules/filemanager/images/pdf_icon.png',
             ],
 
         ];
