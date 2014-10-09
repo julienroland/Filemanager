@@ -97,7 +97,7 @@ class FileManager
             echo 'Uploaded';
         }
         if ($filedatabased) {
-            echo 'Insert';
+            return $filedatabased;
         }
     }
 
@@ -265,7 +265,6 @@ class FileManager
 
     private function fileSaveInFolder()
     {
-
         switch ($this->file->type) {
             case 'file':
                 dd('save file');

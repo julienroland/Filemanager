@@ -49,6 +49,7 @@
 
     });
     var appendFileIntoFolder = function (file, folder) {
+        console.log('drop');
         $.ajax({
             url: 'ajax/file/' + file.attr('data-id') + '/append/folder/' + folder.attr('data-id'),
             success: function (oData) {

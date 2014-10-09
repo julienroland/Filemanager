@@ -46,28 +46,31 @@ class ImageManager extends FileProvider
 
     public function save($file, $path, $type, $provider = null)
     {
-
         if ($this->isDirectory($type)) {
+            /* Provider */
             if (!is_null($provider)) {
                 try {
-                    //$image = $this->saveImageFolder($file, $provider);
-                    //@return boolean
-                    //$this->saveImageProvider($path['pathfilename'], $provider, $image->encoded));
+                    $image = $this->saveImageFolder($file, $provider);
+                    $this->saveImageProvider($path['pathfilename'], $provider, $image->encoded);
                 } catch (Exception $e) {
                     dd($e);
                 }
-                //dd('Dropbox saved');
             } else {
                 $fileUploaded = $this->saveImageFolder($file, $provider);
             }
-        } elseif ($this->isDatabase($type)) {
 
+        }
+
+        if ($this->isDatabase($type)) {
             if (!is_null($provider)) {
-                $this->saveProviderImageDatabase($file, $path, $provider);
+                //$this->saveProviderImageDatabase($file, $path, $provider);
+
             } else {
+
                 return $this->saveImageDatabase($file, $path, $provider);
             }
         }
+
     }
 
     public function resize($file, $options)
@@ -94,36 +97,12 @@ class ImageManager extends FileProvider
 
     private function saveImageDatabase($file, $path, $provider)
     {
-        $this->database->create($file, $path, $provider);
-
-        /*   'name' =>$file->name,
-            'group' =>,
-            'slug' =>$file->slug,
-            'extension' =>$file->extension,
-            'mime' =>$file->mime,
-            'url' =>$path['pathfilename'],
-            'width' =>$file->width(),
-            'height' =>$file->height(),
-            'size' =>,
-            'timestamp' =>$file->timestamp,
-            'external_url' =>,*/
+        return $this->database->create($file, $path, $provider);
     }
 
     private function saveProviderImageDatabase($file, $path, $provider)
     {
-
         $this->database->create($file, $path, $provider);
-        /*   'name' =>$file->name,
-            'group' =>,
-            'slug' =>$file->slug,
-            'extension' =>$file->extension,
-            'mime' =>$file->mime,
-            'url' =>$path['pathfilename'],
-            'width' =>$file->width(),
-            'height' =>$file->height(),
-            'size' =>,
-            'timestamp' =>$file->timestamp,
-            'external_url' =>,*/
     }
 
 }

@@ -18,8 +18,8 @@ class CreateFilesFilesDirectoriesTables extends Migration {
             $table->integer('file_id')->unsigned();
             $table->foreign('file_id')->references('id')->on('files');
 
-            $table->integer('file_directory_id')->unsigned();
-            $table->foreign('file_directory_id')->references('id')->on('files_directories');
+            $table->integer('file_directory_id')->unsigned()->nullable();
+            $table->foreign('file_directory_id')->references('id')->on('files_directories')->nullable();
 
             $table->timestamps();
 		});

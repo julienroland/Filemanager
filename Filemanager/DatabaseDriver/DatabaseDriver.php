@@ -42,23 +42,10 @@ class DatabaseDriver
         $this->auth = $auth;
     }
 
-    /*   'name' =>$file->name,
-                'group' =>,
-                'slug' =>$file->slug,
-                'extension' =>$file->extension,
-                'mime' =>$file->mime,
-                'url' =>$path['pathfilename'],
-                'virtual_url' =>$path['virtual_path'],
-                'width' =>$file->width(),
-                'height' =>$file->height(),
-                'size' =>,
-                'timestamp' =>$file->timestamp,
-                'external_url' =>,
-                'file_access_type_id' =>,
-    */
     public function create($file, $path, $provider)
     {
         $user = $this->auth->check() ? $this->auth->check()->id : null;
+
         $file = $this->file->create([
             'name' => $file->name,
             'group' => null,
@@ -76,6 +63,7 @@ class DatabaseDriver
             'user_id' => $user,
             'file_type_id' => $this->getFileType($file->type),
         ]);
+
         return $file;
 
 

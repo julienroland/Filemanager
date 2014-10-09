@@ -25,6 +25,8 @@ class ImageInterventionImageManagerRepository implements ImageManagerRepository
 
     public function save($file, $path, $quality, $provider = null)
     {
+
         return $file->save($path, $quality);
+
     }
 }

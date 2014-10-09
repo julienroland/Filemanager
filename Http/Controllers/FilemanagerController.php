@@ -109,37 +109,28 @@ class FilemanagerController extends Controller
      */
     public function upload()
     {
-
         if ($this->request->ajax()) {
-
-            $this->ajaxUpload();
+            return $this->ajaxUpload();
         }
-
-        $this->syncUpload();
-
+        return $this->syncUpload();
     }
 
     private function ajaxUpload()
     {
         $this->setAjax(true);
-        //faire la requete ajax
-        //dd($this->ajaxRequest->all());
         $file = $this->ajaxRequest->file(Config::get('filemanager::config.file_name'));
         $type = $this->findFileType($file);
-        $this->file->make($file, $type)->save();
+        $file = $this->file->make($file, $type)->save();
 
-        return 'ok';
-
+        return $file;
     }
 
     /**
      * @param $file
      * @return int|string
      */
-    private
-    function findFileType(
-        $file
-    ) {
+    private function findFileType($file)
+    {
         foreach ($this->getMimes() as $type => $extensions) {
             foreach ($extensions as $extension) {
                 if ($file->getClientMimeType() === $extension) {

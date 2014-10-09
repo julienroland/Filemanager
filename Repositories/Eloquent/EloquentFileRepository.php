@@ -11,7 +11,7 @@ class EloquentFileRepository implements FileRepository
     public function create($file)
     {
         $file = File::create($file);
-
+        $file->fileDirectory()->attach(['file_directory_id' => null]);
         return $file;
 
     }
@@ -40,6 +40,15 @@ class EloquentFileRepository implements FileRepository
         $res = $dir->file()->attach($file);
 
         return $res;
+    }
 
+    public function getByDirectories()
+    {
+        $files = File::with([
+            'fileDirectory' => function ($query) {
+                $query->where('file_directory_id', null);
+            }
+        ])->get();
+        return $files;
     }
 }
