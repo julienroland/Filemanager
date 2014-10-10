@@ -40,6 +40,7 @@ class EloquentFileRepository implements FileRepository
         $dir = FileDirectory::find($folder_id);
         $file = File::find($file_id);
 
+        $file->fileDirectory()->detach();
         $res = $dir->file()->attach($file);
 
         return $res;
@@ -48,12 +49,12 @@ class EloquentFileRepository implements FileRepository
     public function getByDirectories()
     {
         return File::with([
-            'fileDirectory' => function ($query) {
-                $query->where('file_directory_id', null);
-            },
+            'fileDirectory',
             'fileVariant' => function ($query) {
                 $query->where('group', 'icon');
             }
-        ])->get();
+        ])->whereHas('fileDirectory', function ($query) {
+            $query->where('file_directory_id', null);
+        })->get();
     }
 }

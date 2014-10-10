@@ -69,24 +69,26 @@
     }
     var editFileName = function (e) {
         e.preventDefault();
-        console.log($(this));
+        //$(this).parent().find('input.name').blur();
         displayInputFileName($(this));
     }
     var displayInputFileName = function ($that) {
         $that.parent().find('input.name').toggleClass('hidden');
         $that.parent().find('div.name').toggleClass('hidden');
-        $that.parent().find('input.name').focus();
+        //$that.parent().find('input.name').focus();
         refreshHtmlFileNameValue($that);
     }
     var refreshHtmlFileNameValue = function ($that) {
         refreshFileNameValue($that);
         $that.parent().find('div.name').html($that.parent().find('input.name').val());
+
     }
 
     var editFolderName = function (e) {
         e.preventDefault();
-        $(this).parent().find('input.name').removeClass('hidden');
-        $(this).parent().find('div.name').addClass('hidden');
+        $(this).parent().find('input.name').toggleClass('hidden');
+        $(this).parent().find('div.name').toggleClass('hidden');
+        refreshHtmlFolderNameValue($(this));
     }
     var displayInputFolderName = function ($that) {
         $that.parent().find('input.name').toggleClass('hidden');
@@ -105,6 +107,7 @@
             data: data,
             success: function (oData) {
                 console.log(oData);
+
             }
         });
     }
@@ -138,7 +141,6 @@
             var folder_output = '<div class="folder" data-id="' + folder.id + '"> <div class="icon"> <a href="javascript:void(0)" data-request="open_folder"> <img src="/modules/filemanager/images/folder_icon.png" alt="' + oLang.library.Folder + '"/> </a> </div> <div class="name">' + oLang.library.folder.default_name + ' </div><input type="text" data-request="edit_folder_name" class="name hidden" value="' + oLang.library.folder.default_name + '"/> </div>';
 
             return folder_output;
-
             refreshHtmlFolderNameValue();
         }
     }
