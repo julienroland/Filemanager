@@ -75,7 +75,7 @@
     var displayInputFileName = function ($that) {
         $that.parent().find('input.name').toggleClass('hidden');
         $that.parent().find('div.name').toggleClass('hidden');
-
+        $that.parent().find('input.name').focus();
         refreshHtmlFileNameValue($that);
     }
     var refreshHtmlFileNameValue = function ($that) {

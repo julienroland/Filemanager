@@ -6,6 +6,7 @@ class FileVariant extends Model
 {
     protected $fillable = [
         'name',
+        'group',
         'slug',
         'url',
         'width',

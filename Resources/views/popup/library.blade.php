@@ -33,7 +33,7 @@
     <div class="file" data-id="{{$file->id}}">
     <div class="icon">
     <a href="javascript:void(0)">
-    <img src="{{$file->fileType->icon}}" alt=""/>
+    <img src="{{isset($file->fileVariant[0]) ? upload_dir($file->fileVariant[0]->url) : $file->fileType->icon}}" alt=""/>
     </a>
     </div>
     <div class="name">

@@ -116,6 +116,7 @@ class FileManager
     public function resize($options)
     {
         $this->setImage($this->image->resize($this->file, $options));
+        $this->setVariantName($options);
         $this->setVariantPrefix($this->file,
             $this->getVariantPrefixName('resize', $this->outputImgSize($options)));
         return $this;
@@ -412,6 +413,15 @@ class FileManager
     private function outputImgSize($options)
     {
         return $options['width'] . 'x' . $options['height'];
+    }
+
+    private function setVariantName($options)
+    {
+        if (isset($options['name'])) {
+            $this->file->variantName = $options['name'];
+        } else {
+            $this->file->variantName = null;
+        }
     }
 
 

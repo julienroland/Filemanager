@@ -105,6 +105,7 @@ class DatabaseDriver
     {
         return $this->fileVariant->create([
             'name' => $file->name,
+            'group' => $file->variantName,
             'slug' => $file->slug,
             'url' => $path['pathfilename'],
             'width' => $file->width(),

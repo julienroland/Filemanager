@@ -33,7 +33,12 @@ class File extends Model
 
     public function fileDirectory()
     {
-        return $this->belongsToMany('Modules\Filemanager\Entities\FileDirectory','files_files_directories');
+        return $this->belongsToMany('Modules\Filemanager\Entities\FileDirectory', 'files_files_directories');
+    }
+
+    public function fileVariant()
+    {
+        return $this->hasMany('Modules\Filemanager\Entities\FileVariant');
     }
 
 }

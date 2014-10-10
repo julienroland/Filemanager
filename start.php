@@ -16,7 +16,6 @@ Lang::addNamespace('filemanager', __DIR__ . '/Resources/lang/');
 
 Config::addNamespace('filemanager', __DIR__ . '/Config/');
 
-
 /*
 |--------------------------------------------------------------------------
 | Require The Routes file.
@@ -27,3 +26,4 @@ Config::addNamespace('filemanager', __DIR__ . '/Config/');
 */
 
 require __DIR__ . '/Http/routes.php';
+require __DIR__ . '/helpers.php';

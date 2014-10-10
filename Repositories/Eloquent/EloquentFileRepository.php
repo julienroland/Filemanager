@@ -23,7 +23,6 @@ class EloquentFileRepository implements FileRepository
     public function all()
     {
         $files = File::with('fileType')->get();
-
         return $files;
     }
 
@@ -48,11 +47,13 @@ class EloquentFileRepository implements FileRepository
 
     public function getByDirectories()
     {
-        $files = File::with([
+        return File::with([
             'fileDirectory' => function ($query) {
                 $query->where('file_directory_id', null);
+            },
+            'fileVariant' => function ($query) {
+                $query->where('group', 'icon');
             }
         ])->get();
-        return $files;
     }
 }

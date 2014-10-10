@@ -16,6 +16,7 @@ class CreateFilesVariantsTable extends Migration
         Schema::create('files_variants', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
+            $table->string('group')->nullable();
             $table->string('url');
             $table->string('slug');
             $table->integer('width');
