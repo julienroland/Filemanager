@@ -28,9 +28,6 @@ class CreateFilesTable extends Migration
             $table->string('timestamp');
             $table->string('external_url')->nullable();
 
-            $table->integer('file_variant_id')->unsigned()->nullable();
-            $table->foreign('file_variant_id')->references('id')->on('files_variants');
-
             $table->integer('file_access_type_id')->unsigned()->nullable();
             $table->foreign('file_access_type_id')->references('id')->on('files_access_types');
 

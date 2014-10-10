@@ -4,5 +4,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class FileVariant extends Model
 {
-    protected $table = "Files_variants";
+    protected $fillable = [
+        'name',
+        'slug',
+        'url',
+        'width',
+        'height',
+        'size',
+        'file_id',
+    ];
+
+    protected $table = "files_variants";
 }

@@ -3,7 +3,7 @@
     var oLang,
         file = $('#file_filemanager'),
         button_file = $('#filemanager_library'),
-        finder = $('#folder_finder'),
+        folder_finder = $('#folder_finder'),
         foldersName = $('.folder div.name'),
         foldersInput = $('.folder input.name'),
         folders = [],
@@ -11,6 +11,8 @@
 
         filesName = $('.file div.name'),
         filesInput = $('.file input.name'),
+        file_finder = $('#file_finder'),
+        filemanager_asset = '/filemanager/',
         folderList = $('.folder'),
         nav_link = $('#filemanager_library-popup .navigation a[data-request="create_folder"]');
 
@@ -25,7 +27,6 @@
         filesInput.on('blur', editFileName);
         $('.file').draggable();
         $('.folder').draggable();
-
         $('.folder').droppable({
             drop: function (e, ui) {
                 appendFileIntoFolder(ui.draggable, $(this));
@@ -36,18 +37,27 @@
             }
         });
 
-
         file.fileupload({
             url: 'ajax/upload',
             dataType: 'json',
             done: function (e, oData) {
-                console.log(oData);
+                console.log(oData.result);
                 //je return pas d'obj pour recup la file
-                displayFile(oData);
+                appendFile(displayFile(oData.result));
+            },
+            progressall: function (e, data) {
+                var progress = parseInt(data.loaded / data.total * 100, 10);
+                $('#progress .bar').css(
+                    'width',
+                    progress + '%'
+                );
             }
         });
 
     });
+    var appendFile = function (sString) {
+        file_finder.append(sString);
+    }
     var appendFileIntoFolder = function (file, folder) {
         console.log('drop');
         $.ajax({
@@ -102,15 +112,17 @@
         $(this).toggleClass('hidden');
     }
     var displayFile = function (oData) {
+        console.log(oData);
         if (oData !== "undefined") {
-            files.push(file);
 
             var file = {};
             file.id = oData.id;
             file.name = oData.name;
-            file.fileType.icon = oData.fileType.icon;
+            file.url = oData.url;
+            //file.fileType.icon = oData.file_type.icon;
+            files.push(file);
 
-            var file_output = '<div class="file" data-id="{{$file->id}}"><div class="icon"><a href="javascript:void(0)"><img src="{{$file->fileType->icon}}" alt=""/></a> </div> <div class="name">{{$file->name}} </div> <input type="text" data-request="edit_file_name" class="name hidden" value="{{$file->name}}"/> </div>';
+            var file_output = '<div class="file" data-id="' + file.id + '"><div class="icon"><a href="javascript:void(0)"><img src="' + filemanager_asset + file.url + '" alt=""/></a> </div> <div class="name">' + file.name + ' </div> <input type="text" data-request="edit_file_name" class="name hidden" value="' + file.name + '"/> </div>';
 
             return file_output;
         }
@@ -156,7 +168,7 @@
                 var edit = true;
                 var folder = $(displayFolder(oData));
                 console.log(folder);
-                finder.append(folder);
+                folder_finder.append(folder);
                 displayInputFolderName(folder.find('input.name'))
                 folder.find('input.name').focus();
                 folder.find('input.name').on('blur', function () {

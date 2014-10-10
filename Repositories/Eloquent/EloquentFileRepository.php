@@ -2,11 +2,15 @@
 
 use Modules\Filemanager\Entities\File;
 use Modules\Filemanager\Entities\FileDirectory;
-use Modules\Filemanager\Entities\FileType;
 use Modules\Filemanager\Repositories\FileRepository;
 
 class EloquentFileRepository implements FileRepository
 {
+
+    public function find($file_id)
+    {
+        return File::whereId($file_id)->with('fileType')->first();
+    }
 
     public function create($file)
     {

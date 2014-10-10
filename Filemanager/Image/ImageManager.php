@@ -44,7 +44,7 @@ class ImageManager extends FileProvider
         return $this->image->make($file);
     }
 
-    public function save($file, $path, $type, $provider = null)
+    public function save($file, $path, $type, $variant, $provider = null)
     {
         if ($this->isDirectory($type)) {
             /* Provider */
@@ -67,7 +67,7 @@ class ImageManager extends FileProvider
 
             } else {
 
-                return $this->saveImageDatabase($file, $path, $provider);
+                return $this->saveImageDatabase($file, $path, $variant, $provider);
             }
         }
 
@@ -95,14 +95,14 @@ class ImageManager extends FileProvider
         return $this->filesystem->disk($provider)->put($pathfilename, $encoded);
     }
 
-    private function saveImageDatabase($file, $path, $provider)
+    private function saveImageDatabase($file, $path, $variant, $provider)
     {
-        return $this->database->create($file, $path, $provider);
+        return $this->database->create($file, $path, $variant, $provider);
     }
 
-    private function saveProviderImageDatabase($file, $path, $provider)
+    private function saveProviderImageDatabase($file, $path, $variant, $provider)
     {
-        $this->database->create($file, $path, $provider);
+        $this->database->create($file, $path, $variant, $provider);
     }
 
 }

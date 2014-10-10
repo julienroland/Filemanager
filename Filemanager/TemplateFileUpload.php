@@ -42,7 +42,6 @@ class TemplateFileUpload
 
     public function image()
     {
-
         $button = $this->outputFile->createButtonLibrary('image');
         $file = $this->outputFile->createInputFile('image');
 

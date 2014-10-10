@@ -120,8 +120,14 @@ class FilemanagerController extends Controller
         $this->setAjax(true);
         $file = $this->ajaxRequest->file(Config::get('filemanager::config.file_name'));
         $type = $this->findFileType($file);
-        $file = $this->file->make($file, $type)->save();
-
+        $file = $this->file->make($file, $type)->variant([
+            'resize' =>
+                [
+                    'name' => 'icon',
+                    'width' => 60,
+                    'height' => 60
+                ]
+        ])->save();
         return $file;
     }
 

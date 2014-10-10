@@ -1,3 +1,7 @@
+<style>.bar {
+           height: 18px;
+           background: green;
+       }</style>
 <?php echo Module::style('filemanager','css/style.css'); ?>
 <div id="{{Config::get('filemanager::config.library_class')}}-popup" class="{{Config::get('filemanager::config.library_class')}}-popup">
 
@@ -9,6 +13,11 @@
      <li>
     <a data-request="upload_file" href="javascript:void(0)">{{trans('filemanager::library.upload_file')}}</a>
     {{Upload::image()}}
+    <div id="progress">
+        <div class="bar" style="width: 0%;"></div>
+    </div>
+
+
     </li>
     </ul>
 </nav>
@@ -37,6 +46,7 @@
 </div>
 </div>
 </div>
+
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <?php echo Module::script('filemanager','js/jquery-ui.js');?>
 <?php echo Module::script('filemanager','js/ajaxUpload.js');?>

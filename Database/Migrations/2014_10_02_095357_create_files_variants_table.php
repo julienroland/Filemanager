@@ -21,9 +21,8 @@ class CreateFilesVariantsTable extends Migration
             $table->integer('width');
             $table->integer('height');
             $table->integer('size')->nullable();
-
-            $table->integer('file_variant_type_id')->unsigned()->nullable();
-            $table->foreign('file_variant_type_id')->references('id')->on('files_variants_types');
+            $table->integer('file_id')->unsigned()->nullable();
+            $table->foreign('file_id')->references('id')->on('files');
             $table->timestamps();
         });
     }

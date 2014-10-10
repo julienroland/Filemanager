@@ -3,6 +3,8 @@
 interface FileRepository
 {
 
+    public function find($file_id);
+
     public function create($file);
 
     public function all();

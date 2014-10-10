@@ -26,8 +26,7 @@ class FileManager
     /**
      * @var Image
      */
-    public $image;
-
+    protected $variant = false;
     /**
      * @var Carbon
      */
@@ -87,12 +86,13 @@ class FileManager
 
     public function save()
     {
-        $this->setToday();
         $this->setSlug();
         $this->setFileFullPath();
         $fileUploaded = $this->fileSaveInFolder();
-        $filedatabased = $this->fileSaveToDatabase();
-
+        $filedatabased = $this->fileSaveToDatabase($this->variant);
+        if ($this->variant === false) {
+            $this->file->id = $filedatabased->id;
+        }
         if ($fileUploaded) {
             echo 'Uploaded';
         }
@@ -101,9 +101,23 @@ class FileManager
         }
     }
 
+    public function variant($variants)
+    {
+        $this->setFileFullPath();
+        $this->save();
+
+        $this->variant = true;
+        foreach ($variants as $key => $variant) {
+            $this->{$key}($variant);
+        }
+        return $this;
+    }
+
     public function resize($options)
     {
         $this->setImage($this->image->resize($this->file, $options));
+        $this->setVariantPrefix($this->file,
+            $this->getVariantPrefixName('resize', $this->outputImgSize($options)));
         return $this;
     }
 
@@ -157,6 +171,8 @@ class FileManager
 
     private function getFormatFolder()
     {
+        $this->setToday();
+
         $year = $this->todayDate->year;
         $month = $this->todayDate->month;
         $day = $this->todayDate->day;
@@ -166,12 +182,16 @@ class FileManager
 
     private function getTimestamp()
     {
+        $this->setToday();
         return $this->todayDate->timestamp;
     }
 
-    private function getNameWithoutExtension()
+    private function getNameWithoutExtension($name = null)
     {
-        return explode($this->file->extension, $this->file->name)[0];
+        if (is_null($name)) {
+            $name = $this->file->name;
+        }
+        return explode('.' . $this->file->extension, $name)[0];
     }
 
     private function getDirectory($destinationPath, $provider_path)
@@ -190,12 +210,13 @@ class FileManager
         return $destinationPath;
     }
 
-    private function setSlug()
+    private function setSlug($name = null)
     {
+
         $this->setTimestamp();
         $this->setName();
         $this->setExtension();
-        $this->file->slug = $this->string->slug($this->getTimestamp() . ' ' . $this->getNameWithoutExtension()) . '.' . $this->file->extension;
+        $this->file->slug = $this->string->slug($this->getTimestamp() . ' ' . $this->getNameWithoutExtension($name)) . '.' . $this->file->extension;
     }
 
 
@@ -276,14 +297,14 @@ class FileManager
     }
 
 
-    private function fileSaveToDatabase()
+    private function fileSaveToDatabase($variant = false)
     {
         switch ($this->file->type) {
             case 'file':
                 dd('save file');
                 break;
             case 'image':
-                return $this->image->save($this->file, $this->getPath(), 'database', $this->provider);
+                return $this->image->save($this->file, $this->getPath(), 'database', $variant, $this->provider);
                 break;
         }
     }
@@ -305,6 +326,7 @@ class FileManager
 
     private function setFileFullPath()
     {
+        $this->setSlug();
         $provider = isset($this->provider) ? $this->provider . '/' : '';
         $fullpath = $this->getFilePath() . $provider . $this->getFileFilename();
         $this->file->fullPath = $fullpath;
@@ -368,6 +390,28 @@ class FileManager
     {
         $this->file->name = isset($this->file->name) ? $this->file->name : $this->file->getClientOriginalName();
 
+    }
+
+    private function setVariantPrefix($file, $variant)
+    {
+        $file->slug = $this->addBeforeExtension($variant, $file->slug, $this->file->extension);
+        $file->name = $this->addBeforeExtension($variant, $file->name, $this->file->extension);
+    }
+
+    private function addBeforeExtension($variant, $name, $extension)
+    {
+        $name = $this->getNameWithoutExtension($name);
+        return $name . '-' . $variant . '.' . $extension;
+    }
+
+    private function getVariantPrefixName($string, $options)
+    {
+        return $string . '-' . $options;
+    }
+
+    private function outputImgSize($options)
+    {
+        return $options['width'] . 'x' . $options['height'];
     }
 
 
