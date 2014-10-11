@@ -4,7 +4,7 @@
 interface FileDirectoryRepository
 {
 
-    public function all();
+    public function get($id = null);
 
     public function create($name = null);
 

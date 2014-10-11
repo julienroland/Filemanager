@@ -9,7 +9,7 @@ interface FileRepository
 
     public function all();
 
-    public function getByDirectories();
+    public function getByDirectories($id = null);
 
     public function update($id, $request);
 

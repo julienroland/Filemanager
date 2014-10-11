@@ -22,10 +22,10 @@ class FileController extends Controller
         $this->directory = $directory;
     }
 
-    public function outputLibrary()
+    public function outputLibrary($id = null)
     {
-        $files = $this->file->getByDirectories();
-        $directories = $this->directory->all();
+        $files = $this->file->getByDirectories($id);
+        $directories = $this->directory->get($id);
         return view('filemanager::popup.library')
             ->with(compact('files', 'directories'));
     }

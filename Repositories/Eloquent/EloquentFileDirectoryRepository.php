@@ -6,9 +6,9 @@ use Modules\Filemanager\Repositories\FileDirectoryRepository;
 
 class EloquentFileDirectoryRepository implements FileDirectoryRepository
 {
-    public function all()
+    public function get($id = null)
     {
-        $folders = FileDirectory::all();
+        $folders = FileDirectory::where('parent_id', $id)->get();
         return $folders;
     }
 

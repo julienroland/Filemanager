@@ -10,6 +10,7 @@
         files = [],
 
         filesName = $('.file div.name'),
+        filesLink = $('.file a'),
         filesInput = $('.file input.name'),
         file_finder = $('#file_finder'),
         filemanager_asset = '/filemanager/',

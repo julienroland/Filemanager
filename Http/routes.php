@@ -25,6 +25,10 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'before' => 'Laravel
                 get('library', [
                     'uses' => 'FileController@outputLibrary'
                 ]);
+                get('library/folder/{id}', [
+                    'as'=>'filemanager.show.folder',
+                    'uses' => 'FileController@outputLibrary'
+                ]);
 
                 post('ajax/upload',
                     [
@@ -39,6 +43,8 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'before' => 'Laravel
                 get('ajax/folder/create', [
                     'uses' => 'DirectoryController@create'
                 ]);
+
+
 
                 get('ajax/folder/update/{id}', [
                     'uses' => 'DirectoryController@update'

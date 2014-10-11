@@ -25,4 +25,5 @@ class DirectoryController extends Controller
     {
         return $this->directory->update($id, $request);
     }
+
 }
