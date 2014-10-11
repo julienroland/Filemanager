@@ -23,10 +23,7 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'before' => 'Laravel
                     ]);
 
                 get('library', [
-                    'uses' => 'FileController@outputLibrary'
-                ]);
-                get('library/folder/{id}', [
-                    'as'=>'filemanager.show.folder',
+                    'as'=>'filemanager.library',
                     'uses' => 'FileController@outputLibrary'
                 ]);
 

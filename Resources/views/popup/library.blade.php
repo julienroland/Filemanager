@@ -25,7 +25,7 @@
 <div class="folder_finder" id="folder_finder">
 @foreach($directories as $directory)
 
-<div class="folder" data-id="{{$directory->id}}"> <div class="icon"> <a href="{{route('filemanager.show.folder',['id'=>$directory->id])}}" data-request="open_folder"> <img src="{{Module::asset('filemanager', 'images/folder_icon.png')}}" alt="{{trans('filemanager::library.Folder')}}"/> </a> </div> <div class="name">{{!is_null($directory->name) ? $directory->name : trans('filemanager::library.folder.default_name')}} </div><input type="text" data-request="edit_folder_name" class="name hidden" value="{{!is_null($directory->name) ? $directory->name : trans('filemanager::library.folder.default_name')}}"/> </div>
+<div class="folder" data-id="{{$directory->id}}"> <div class="icon"> <a href="{{route('filemanager.library',['directory'=>$directory->id])}}" data-request="open_folder"> <img src="{{Module::asset('filemanager', 'images/folder_icon.png')}}" alt="{{trans('filemanager::library.Folder')}}"/> </a> </div> <div class="name">{{!is_null($directory->name) ? $directory->name : trans('filemanager::library.folder.default_name')}} </div><input type="text" data-request="edit_folder_name" class="name hidden" value="{{!is_null($directory->name) ? $directory->name : trans('filemanager::library.folder.default_name')}}"/> </div>
 @endforeach
 </div>
 <div class="file_finder" id="file_finder">

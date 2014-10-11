@@ -26,6 +26,8 @@
 
         filesName.on('dblclick', editFileName);
         filesInput.on('blur', editFileName);
+        filesLink.on('click', targetFile);
+        filesLink.on('blur', unTargetFile);
         $('.file').draggable();
         $('.folder').draggable();
         $('.folder').droppable({
@@ -56,6 +58,23 @@
         });
 
     });
+    var unTargetFile = function () {
+        console.log('blur');
+        $(this).parents('.file').removeClass('target');
+    }
+    var targetFile = function (e) {
+        e.preventDefault();
+        $(this).focus();
+        $(this).parents('.file').addClass('target');
+
+        $(this).on('keypress', function (e) {
+            console.log(e);
+            if (e.which == 32) {
+                console.log('enter');
+                editFileName($(this));
+            }
+        })
+    }
     var appendFile = function (sString) {
         file_finder.append(sString);
     }
@@ -68,10 +87,12 @@
             }
         })
     }
-    var editFileName = function (e) {
-        e.preventDefault();
+    var editFileName = function ($that) {
+        if (typeof $that === "undefined") {
+            var $that = $(this);
+        }
         //$(this).parent().find('input.name').blur();
-        displayInputFileName($(this));
+        displayInputFileName($that);
     }
     var displayInputFileName = function ($that) {
         $that.parent().find('input.name').toggleClass('hidden');

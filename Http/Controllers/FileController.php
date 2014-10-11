@@ -22,8 +22,9 @@ class FileController extends Controller
         $this->directory = $directory;
     }
 
-    public function outputLibrary($id = null)
+    public function outputLibrary(Request $request)
     {
+        $id = $request->get('directory');
         $files = $this->file->getByDirectories($id);
         $directories = $this->directory->get($id);
         return view('filemanager::popup.library')
