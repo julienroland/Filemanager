@@ -40,11 +40,10 @@ class TemplateFileUpload
         return $this->outputFile->createInputMultipleFile('dropbox');
     }
 
-    public function image()
+    public function image($params = null)
     {
         $button = $this->outputFile->createButtonLibrary('image');
-        $file = $this->outputFile->createInputFile('image');
-
+        $file = $this->outputFile->createInputFile('image', $params);
         return $button . $file;
     }
 

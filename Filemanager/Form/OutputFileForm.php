@@ -19,9 +19,14 @@ class OutputFileForm extends FileForm
         $this->config = $config;
     }
 
-    public function createInputFile($type, $type2 = null)
+    public function createInputFile($type, $params = null, $type2 = null)
     {
-        return $this->outputInputFileTemplate($type, $type2);
+        return $this->outputInputFileTemplate($type, $params, $type2);
+    }
+
+    public function createInputMultipleFile($type, $params = null, $type2 = null)
+    {
+        return $this->outputInputFileMultipleTemplate($type, $params $type2);
     }
 
     public function createButtonLibrary($type, $type2 = null)
@@ -29,21 +34,17 @@ class OutputFileForm extends FileForm
         return $this->outputButtonLibraryTemplate($type, $type2);
     }
 
-    public function createInputMultipleFile($type, $type2 = null)
-    {
-        return $this->outputInputFileMultipleTemplate($type, $type2);
-    }
 
-    protected function outputInputFileTemplate($type, $type2)
+    protected function outputInputFileTemplate($type, $params = null, $type2)
     {
         echo $this->openTag() . $this->inputTag() . ' ' . $this->type() . ' ' . $this->name() . ' ' . $this->classes('hidden') . ' ' . $this->id() . ' ' . $this->inlineCloseTag();
-        echo $this->outputHiddenFieldTemplate($type, $type2);
+        echo $this->outputHiddenFieldTemplate($type, $params, $type2);
     }
 
-    protected function outputInputFileMultipleTemplate($type, $type2 = null)
+    protected function outputInputFileMultipleTemplate($type, $params = null, $type2 = null)
     {
         echo $this->openTag() . $this->inputTag() . ' ' . $this->type() . ' ' . $this->nameMultipleFile() . ' ' . $this->classes() . ' ' . $this->id() . ' ' . $this->multipleAttr() . ' ' . $this->inlineCloseTag();
-        echo $this->outputHiddenFieldTemplate($type, $type2);
+        echo $this->outputHiddenFieldTemplate($type, $params, $type2);
     }
 
     private function outputButtonLibraryTemplate($type, $type2)
@@ -67,11 +68,21 @@ class OutputFileForm extends FileForm
         return '/>';
     }
 
-    private function outputHiddenFieldTemplate($value, $type = null)
+    private function outputHiddenFieldTemplate($value, $params = null, $type = null)
     {
-        $value = $this->createValueType($value, $type);
+        $inputHidden = '';
 
-        return '<input type="hidden" ' . $this->nameAttr() . $this->config->get('filemanager::config.hidden_field_name') . ' value="' . $value . '"/>';
+        $value = $this->createValueType($value, $type);
+        $inputHidden .= '<input type="hidden" ' . $this->nameAttr() . $this->config->get('filemanager::config.hidden_field_name') . ' value="' . $value . '"/>';
+
+        if (!is_null($params)) {
+            foreach ($params as $name => $value) {
+                $inputHidden .= '<input type="hidden" ' . $this->nameAttr() . $name . ' value="' . $value . '"/>';
+            }
+
+        }
+
+        return $inputHidden;
     }
 
     private function createValueType($value, $type)
