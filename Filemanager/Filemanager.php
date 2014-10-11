@@ -73,12 +73,13 @@ class FileManager
     }
 
 
-    public function make($fileOrRequest, $type = null)
+    public function make($fileOrRequest, $type = null, $params = null)
     {
         if (!$this->isRequestAndSetFile($fileOrRequest)) {
             $this->setFile($fileOrRequest);
             $this->setFileType($type);
         }
+        $this->setParams($params);
         $this->changeToTypeFile();
         $this->hasAProvider();
         return $this;
@@ -90,8 +91,9 @@ class FileManager
         $this->setFileFullPath();
         $fileUploaded = $this->fileSaveInFolder();
         $filedatabased = $this->fileSaveToDatabase($this->variant);
-        if ($this->variant === false) {
+        if ($this->variant == false) {
             $this->file->id = $filedatabased->id;
+
         }
         if ($fileUploaded) {
             echo 'Uploaded';
@@ -105,7 +107,6 @@ class FileManager
     {
         $this->setFileFullPath();
         $this->save();
-
         $this->variant = true;
         foreach ($variants as $key => $variant) {
             $this->{$key}($variant);
@@ -134,8 +135,10 @@ class FileManager
             $file = $this->getFile();
         }
         $type = $this->file->type;
+        $params = $this->file->params;
         $this->file = $this->image->make($file);
         $this->file->type = $type;
+        $this->file->params = $params;
         $this->file->name = $file->getClientOriginalName();
         $this->file->extension = $file->getClientOriginalExtension();
 
@@ -422,6 +425,11 @@ class FileManager
         } else {
             $this->file->variantName = null;
         }
+    }
+
+    private function setParams($params = null)
+    {
+        $this->file->params = $params;
     }
 
 

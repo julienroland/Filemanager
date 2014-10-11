@@ -15,5 +15,10 @@ class FileVariant extends Model
         'file_id',
     ];
 
+    public function scopeIcon($query)
+    {
+        $query->where('group', 'icon');
+    }
+
     protected $table = "files_variants";
 }

@@ -118,9 +118,11 @@ class FilemanagerController extends Controller
     private function ajaxUpload()
     {
         $this->setAjax(true);
+
         $file = $this->ajaxRequest->file(Config::get('filemanager::config.file_name'));
+        $params = $this->ajaxRequest->get(Config::get('filemanager::config.file_params_directory'));
         $type = $this->findFileType($file);
-        $file = $this->file->make($file, $type)->variant([
+        $file = $this->file->make($file, $type, $params)->variant([
             'resize' =>
                 [
                     'name' => 'icon',
@@ -128,6 +130,7 @@ class FilemanagerController extends Controller
                     'height' => 60
                 ]
         ])->save();
+
         return $file;
     }
 

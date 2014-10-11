@@ -47,28 +47,10 @@ class ImageManager extends FileProvider
     public function save($file, $path, $type, $variant, $provider = null)
     {
         if ($this->isDirectory($type)) {
-            /* Provider */
-            if (!is_null($provider)) {
-                try {
-                    $image = $this->saveImageFolder($file, $provider);
-                    $this->saveImageProvider($path['pathfilename'], $provider, $image->encoded);
-                } catch (Exception $e) {
-                    dd($e);
-                }
-            } else {
-                $fileUploaded = $this->saveImageFolder($file, $provider);
-            }
-
+            return $this->directorySave($file, $path, $provider);
         }
-
         if ($this->isDatabase($type)) {
-            if (!is_null($provider)) {
-                //$this->saveProviderImageDatabase($file, $path, $provider);
-
-            } else {
-
-                return $this->saveImageDatabase($file, $path, $variant, $provider);
-            }
+            return $this->databaseSave($file, $path, $variant, $provider);
         }
 
     }
@@ -103,6 +85,32 @@ class ImageManager extends FileProvider
     private function saveProviderImageDatabase($file, $path, $variant, $provider)
     {
         $this->database->create($file, $path, $variant, $provider);
+    }
+
+    private function directorySave($file, $path, $provider = null)
+    {
+        /* Provider */
+        if (!is_null($provider)) {
+            try {
+                $image = $this->saveImageFolder($file, $provider);
+                $this->saveImageProvider($path['pathfilename'], $provider, $image->encoded);
+            } catch (Exception $e) {
+                dd($e);
+            }
+        } else {
+            $fileUploaded = $this->saveImageFolder($file, $provider);
+        }
+    }
+
+    private function databaseSave($file, $path, $variant, $provider = null)
+    {
+        if (!is_null($provider)) {
+            //$this->saveProviderImageDatabase($file, $path, $provider);
+
+        } else {
+
+            return $this->saveImageDatabase($file, $path, $variant, $provider);
+        }
     }
 
 }

@@ -142,13 +142,11 @@
         $(this).toggleClass('hidden');
     }
     var displayFile = function (oData) {
-        console.log(oData);
         if (oData !== "undefined") {
-
             var file = {};
             file.id = oData.id;
             file.name = oData.name;
-            file.url = oData.url;
+            file.url = oData.file_variant[0].url;
             //file.fileType.icon = oData.file_type.icon;
             files.push(file);
 

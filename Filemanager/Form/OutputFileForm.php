@@ -26,7 +26,7 @@ class OutputFileForm extends FileForm
 
     public function createInputMultipleFile($type, $params = null, $type2 = null)
     {
-        return $this->outputInputFileMultipleTemplate($type, $params $type2);
+        return $this->outputInputFileMultipleTemplate($type, $params, $type2);
     }
 
     public function createButtonLibrary($type, $type2 = null)
@@ -37,7 +37,7 @@ class OutputFileForm extends FileForm
 
     protected function outputInputFileTemplate($type, $params = null, $type2)
     {
-        echo $this->openTag() . $this->inputTag() . ' ' . $this->type() . ' ' . $this->name() . ' ' . $this->classes('hidden') . ' ' . $this->id() . ' ' . $this->inlineCloseTag();
+        echo $this->openTag() . $this->inputTag() . ' ' . $this->type() . ' ' . $this->name() . ' ' . $this->params($params) . ' ' . $this->classes('hidden') . ' ' . $this->id() . ' ' . $this->inlineCloseTag();
         echo $this->outputHiddenFieldTemplate($type, $params, $type2);
     }
 
@@ -101,6 +101,13 @@ class OutputFileForm extends FileForm
     private function buttonCloseTag()
     {
         return '</button>';
+    }
+
+    private function params($params = null)
+    {
+        if(!is_null($params)){
+            return 'data-form-data='.json_encode($params);
+        }
     }
 
 

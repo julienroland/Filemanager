@@ -9,5 +9,6 @@
         'hidden_field_name' => 'type_filemanager',
         'library_class' => 'filemanager_library',
         'routes_library' => 'library',
+        'file_params_directory' => 'directory',
 
     ];

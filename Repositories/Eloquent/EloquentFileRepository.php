@@ -9,7 +9,12 @@ class EloquentFileRepository implements FileRepository
 
     public function find($file_id)
     {
-        return File::whereId($file_id)->with('fileType')->first();
+        return File::whereId($file_id)->with([
+            'fileDirectory',
+            'fileVariant' => function ($query) {
+                $query->icon();
+            }
+        ])->first();
     }
 
     public function create($file)
@@ -51,7 +56,7 @@ class EloquentFileRepository implements FileRepository
         return File::with([
             'fileDirectory',
             'fileVariant' => function ($query) {
-                $query->where('group', 'icon');
+                $query->icon();
             }
         ])->whereHas('fileDirectory', function ($query) use ($id) {
             $query->where('file_directory_id', $id);
