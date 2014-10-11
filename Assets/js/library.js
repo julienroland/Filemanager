@@ -24,8 +24,12 @@
         foldersInput.on('blur', editFolderName);
         foldersName.on('dblclick', editFolderName);
 
-        filesName.on('dblclick', editFileName);
-        filesInput.on('blur', editFileName);
+        filesName.on('dblclick', function () {
+            editFileName($(this));
+        });
+        filesInput.on('blur', function () {
+            editFileName($(this));
+        });
         filesLink.on('click', targetFile);
         filesLink.on('blur', unTargetFile);
         $('.file').draggable();
@@ -66,14 +70,10 @@
         e.preventDefault();
         $(this).focus();
         $(this).parents('.file').addClass('target');
-
-        $(this).on('keypress', function (e) {
-            console.log(e);
-            if (e.which == 32) {
-                console.log('enter');
-                editFileName($(this));
-            }
-        })
+        $(this).enterKey(function () {
+            console.log('enter');
+            editFileName($(this));
+        });
     }
     var appendFile = function (sString) {
         file_finder.append(sString);
@@ -88,6 +88,7 @@
         })
     }
     var editFileName = function ($that) {
+        console.log($that);
         if (typeof $that === "undefined") {
             var $that = $(this);
         }
@@ -95,14 +96,18 @@
         displayInputFileName($that);
     }
     var displayInputFileName = function ($that) {
-        $that.parent().find('input.name').toggleClass('hidden');
-        $that.parent().find('div.name').toggleClass('hidden');
-        //$that.parent().find('input.name').focus();
+        $that.parents('.file').find('input.name').toggleClass('hidden');
+        $that.parents('.file').find('div.name').toggleClass('hidden');
+        $that.parents('.file').find('input.name').focus();
+
+        $that.parents('.file').find('input.name').enterKey(function () {
+            $(this).blur();
+        })
         refreshHtmlFileNameValue($that);
     }
     var refreshHtmlFileNameValue = function ($that) {
         refreshFileNameValue($that);
-        $that.parent().find('div.name').html($that.parent().find('input.name').val());
+        $that.parents('.file').find('div.name').html($that.parent().find('input.name').val());
 
     }
 
@@ -122,7 +127,7 @@
         if ($that === "undefined") {
             var $that = $(this);
         }
-        console.log($that.parents('.file'));
+        $that.blur();
         var data = {'name': $that.val()};
         $.ajax({
             url: 'ajax/file/update/' + $that.parents('.file').attr('data-id'),
@@ -226,5 +231,15 @@
                 oLang = oData;
             }
         });
+    }
+    $.fn.enterKey = function (fnc) {
+        return $.each(this, function () {
+            $(this).on('keydown', function (e) {
+                var keycode = e.which;
+                if (keycode == '13') {
+                    fnc.call(this, e);
+                }
+            });
+        })
     }
 }).call(this, jQuery);
