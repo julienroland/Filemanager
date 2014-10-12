@@ -76,19 +76,13 @@
         }
         displayInputFileName($that);
     }
-    var displayInputFileName = function ($that) {
+    var toggleFileDivInput = function ($that) {
         $that.parents('.file').find('input.name').toggleClass('hidden');
         $that.parents('.file').find('div.name').toggleClass('hidden');
-        $that.parents('.file').find('input.name').focus();
-        $that.parents('.file').find('input.name').enterKey(function () {
-            $(this).change();
-        });
-        /* $that.parents('.file').find('input.name').on('blur',function () {
-         $(this).change();
-         });
-         $that.parents('.file').find('input.name').on('keydown',function () {
-         $(this).change();
-         });*/
+        $that.parents('.file').find('input.name').not('.hidden').focus();
+    }
+    var displayInputFileName = function ($that) {
+        toggleFileDivInput($that);
         refreshHtmlFileNameValue($that);
     }
     var refreshHtmlFileNameValue = function ($that) {
@@ -99,6 +93,7 @@
     var toggleFolderDivInput = function ($that) {
         $that.parents('.folder').find('input.name').toggleClass('hidden');
         $that.parents('.folder').find('div.name').toggleClass('hidden');
+        $that.parents('.folder').find('input.name').not('.hidden').focus();
     }
     var displayInputFolderName = function ($that) {
         refreshHtmlFolderNameValue($that);
@@ -185,20 +180,6 @@
                 folder_finder.append(folder);
                 displayInputFolderName(folder.find('input.name'))
                 folder.find('input.name').focus();
-                /*folder.find('input.name').on('blur', function () {
-                 displayInputFolderName($(this));
-                 });
-                 folder.find('input.name').enterKey(function (e) {
-                 displayInputFolderName($(this));
-                 });
-                 folder.find('input.name').on('change', function () {
-                 refreshFolderNameValue($(this));
-                 });
-                 folder.find('input.name').on('dblclick', function () {
-                 console.log('ok');
-                 editFolderName($(this));
-                 });*/
-
                 foldersEvents(folder);
             }
         });
@@ -239,15 +220,14 @@
             foldersLink.on('click', targetFolder);
             foldersLink.on('blur', unTargetFolder);
         } else {
-            console.log(folder);
             folder.find('input.name').on('change', function () {
                 editFolderName($(this));
             });
             folder.find('input.name').on('blur', function () {
-                displayInputFolderName($(this));
+                toggleFolderDivInput($(this));
             });
             folder.find('input.name').enterKey(function () {
-                $(this).change();
+                toggleFolderDivInput($(this));
             });
             folder.find('div.name').on('dblclick', function () {
                 editFolderName($(this));
@@ -259,12 +239,20 @@
     }
     var filesEvents = function (file) {
         if (typeof file === "undefined") {
-            filesName.on('dblclick', function () {
-                editFileName($(this));
-            });
             filesInput.on('change', function () {
                 editFileName($(this));
             });
+            filesName.on('dblclick', function () {
+                toggleFileDivInput($(this));
+            });
+            filesInput.on('blur', function () {
+                console.log('file blur');
+                toggleFileDivInput($(this));
+            });
+            filesInput.enterKey(function () {
+                toggleFileDivInput($(this));
+            });
+
             filesLink.on('click', targetFile);
             filesLink.on('blur', unTargetFile);
         } else {
