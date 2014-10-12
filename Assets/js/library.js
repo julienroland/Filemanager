@@ -22,15 +22,7 @@
         getModuleTranslation();
         button_file.on('click', openFileUpload);
         nav_link.on('click', createFolder);
-        foldersInput.on('change', function () {
-            editFolderName($(this));
-        });
-        foldersName.on('dblclick', function () {
-            editFolderName($(this));
-        });
-        foldersLink.on('dblclick', openFolder);
-        foldersLink.on('click', targetFolder);
-        foldersLink.on('blur', unTargetFolder);
+        foldersEvents();
 
         filesName.on('dblclick', function () {
             editFileName($(this));
@@ -52,24 +44,10 @@
             }
         });
 
-        file.fileupload({
-            url: 'ajax/upload',
-            dataType: 'json',
-            done: function (e, oData) {
-                console.log(oData.result);
-                //je return pas d'obj pour recup la file
-                appendFile(displayFile(oData.result));
-            },
-            progressall: function (e, data) {
-                var progress = parseInt(data.loaded / data.total * 100, 10);
-                $('#progress .bar').css(
-                    'width',
-                    progress + '%'
-                );
-            }
-        });
+        fileUpload();
 
     });
+
     var unTargetFolder = function () {
         $(this).parents('.folder').removeClass('target');
     }
@@ -121,7 +99,7 @@
         $that.parents('.file').find('div.name').toggleClass('hidden');
         $that.parents('.file').find('input.name').focus();
         $that.parents('.file').find('input.name').enterKey(function () {
-            $(this).blur();
+            $(this).change();
         });
         refreshHtmlFileNameValue($that);
     }
@@ -130,13 +108,13 @@
         $that.parents('.file').find('div.name').html($that.parent().find('input.name').val());
 
     }
-    var displayInputFolderName = function () {
+    var displayInputFolderName = function ($that) {
         console.log('edit');
         $that.parents('.folder').find('input.name').toggleClass('hidden');
         $that.parents('.folder').find('div.name').toggleClass('hidden');
         $that.parents('.folder').find('input.name').focus();
         $that.parents('.folder').find('input.name').enterKey(function () {
-            $(this).blur();
+            $(this).change();
         });
         refreshHtmlFolderNameValue($that);
     }
@@ -145,12 +123,6 @@
             var $that = $(this);
         }
         displayInputFolderName($that)
-    }
-    var displayInputFolderName = function ($that) {
-        $that.parent().find('input.name').toggleClass('hidden');
-        $that.parent().find('div.name').toggleClass('hidden');
-
-        refreshHtmlFolderNameValue($that);
     }
     var refreshFileNameValue = function ($that) {
         if ($that === "undefined") {
@@ -222,27 +194,26 @@
             dataType: 'json',
             data: {'name': oLang.library.folder.default_name},
             success: function (oData) {
-                var edit = true;
                 var folder = $(displayFolder(oData));
                 console.log(folder);
                 folder_finder.append(folder);
                 displayInputFolderName(folder.find('input.name'))
                 folder.find('input.name').focus();
-                folder.find('input.name').on('blur', function () {
-                    displayInputFolderName($(this));
-                });
-                folder.find('input.name').on('keypress', function (e) {
-                    if (e.which == 13 && edit == true) {
-                        displayInputFolderName($(this));
-                        edit = false;
-                    }
-                });
-                folder.find('input.name').on('change', function () {
-                    refreshFolderNameValue($(this));
-                });
-                folder.find('input.name').on('dblclick', function () {
-                    editFolderName($(this));
-                });
+                /*folder.find('input.name').on('blur', function () {
+                 displayInputFolderName($(this));
+                 });
+                 folder.find('input.name').enterKey(function (e) {
+                 displayInputFolderName($(this));
+                 });
+                 folder.find('input.name').on('change', function () {
+                 refreshFolderNameValue($(this));
+                 });
+                 folder.find('input.name').on('dblclick', function () {
+                 console.log('ok');
+                 editFolderName($(this));
+                 });*/
+
+                foldersEvents(folder);
             }
         });
     }
@@ -260,6 +231,56 @@
             async: false,
             success: function (oData) {
                 oLang = oData;
+            }
+        });
+    }
+    var foldersEvents = function (folder) {
+        if (typeof folder === "undefined") {
+            console.log('basic event');
+            foldersInput.on('change', function () {
+                editFolderName($(this));
+            });
+            foldersName.on('dblclick', function () {
+                console.log('ok');
+                editFolderName($(this));
+            });
+            foldersLink.on('dblclick', openFolder);
+            foldersLink.on('click', targetFolder);
+            foldersLink.on('blur', unTargetFolder);
+        } else {
+            console.log(folder);
+            folder.find('input.name').on('change', function () {
+                editFolderName($(this));
+            });
+            folder.find('input.name').on('blur', function () {
+                displayInputFolderName($(this));
+            });
+            folder.find('input.name').enterKey(function () {
+                $(this).blur();
+            });
+            folder.find('div.name').on('dblclick', function () {
+                editFolderName($(this));
+            });
+            folder.find('a').on('dblclick', openFolder);
+            folder.find('a').on('click', targetFolder);
+            folder.find('a').on('blur', unTargetFolder);
+        }
+    }
+    var fileUpload = function () {
+        file.fileupload({
+            url: 'ajax/upload',
+            dataType: 'json',
+            done: function (e, oData) {
+                console.log(oData.result);
+                //je return pas d'obj pour recup la file
+                appendFile(displayFile(oData.result));
+            },
+            progressall: function (e, data) {
+                var progress = parseInt(data.loaded / data.total * 100, 10);
+                $('#progress .bar').css(
+                    'width',
+                    progress + '%'
+                );
             }
         });
     }
