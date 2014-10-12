@@ -8,7 +8,8 @@
 <div id="{{Config::get('filemanager::config.library_class')}}-popup" class="{{Config::get('filemanager::config.library_class')}}-popup">
 
 @include('filemanager::layout.nav')
-
+<a href="javascript:history.back()">{{trans('filemanager::library.back')}}</a>
+<a href="javascript:history.forward()">{{trans('filemanager::library.next')}}</a>
 <div class="finder">
 <div class="folder_finder" id="folder_finder">
 
