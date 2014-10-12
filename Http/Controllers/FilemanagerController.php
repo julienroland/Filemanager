@@ -117,8 +117,6 @@ class FilemanagerController extends Controller
 
     private function ajaxUpload()
     {
-        $this->setAjax(true);
-
         $file = $this->ajaxRequest->file(Config::get('filemanager::config.file_name'));
         $params = $this->ajaxRequest->get(Config::get('filemanager::config.file_params_directory'));
         $type = $this->findFileType($file);
@@ -148,172 +146,6 @@ class FilemanagerController extends Controller
             }
         }
     }
-
-    /**
-     * @param $file
-     * @param $fileType
-     * @return mixed|void
-     */
-    private
-    function routeFileByType(
-        $input,
-        $fileType
-    ) {
-
-        switch ($fileType) {
-            case 'image':
-                return $this->imageUpload($input);
-                break;
-            case 'application':
-                return $this->applicationUpload($input);
-                break;
-            case 'audio':
-                return $this->audioUpload($input);
-                break;
-            case 'video':
-                return $this->videoUpload($input);
-                break;
-            case 'multipart':
-                return $this->multipartUpload($input);
-                break;
-            case 'text':
-                return $this->TextUpload($input);
-                break;
-        }
-    }
-
-    /**
-     * @param $file
-     * @return mixed
-     */
-    private
-    function imageUpload(
-        $file
-    ) {
-        return Image::make($file);
-    }
-
-
-    /**
-     * @param $file
-     */
-    private
-    function applicationUpload(
-        $file
-    ) {
-        return $this->move($file[Config::get('filemanager::config.file_name')]);
-    }
-
-    /**
-     * @param $file
-     */
-    private
-    function audioUpload(
-        $file
-    ) {
-    }
-
-    /**
-     * @param $file
-     */
-    private
-    function videoUpload(
-        $file
-    ) {
-    }
-
-    /**
-     * @param $file
-     */
-    private
-    function multipartUpload(
-        $file
-    ) {
-    }
-
-    /**
-     * @param $file
-     */
-    private
-    function TextUpload(
-        $file
-    ) {
-    }
-
-    /**
-     * @return array
-     */
-    public
-    function getMimes()
-    {
-        return $this->mimes;
-    }
-
-    /**
-     * @param UploadRequest $request
-     * @return mixed
-     */
-    private
-    function getFileinput(
-        UploadRequest $request
-    ) {
-        return $request->file(Config::get('filemanager::config.file_name'));
-    }
-
-    /**
-     * @param $file
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    private
-    function move(
-        $file
-    ) {
-        return $this->response($this->moving($file));
-    }
-
-    /**
-     * @return mixed
-     */
-    private
-    function getFilePath()
-    {
-        return $this->filemanager->getFilePath();
-    }
-
-    /**
-     * @param $file
-     * @return mixed
-     */
-    private
-    function moving(
-        $file
-    ) {
-        dd('ok');
-        return $file->move($this->getFilePath(), $file->getClientOriginalName());
-    }
-
-    /**
-     * @param $response
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    private
-    function response(
-        $response
-    ) {
-
-        if ($response) {
-            $this->flash->success(trans('filemanager::upload.success'));
-            return $this->redirect->back();
-        }
-
-        $this->flash->error(trans('filemanager::upload.error'));
-        return $this->redirect->back();
-
-    }
-
-    /**
-     *
-     */
     private function syncUpload()
     {
         $input = $this->request->all();
@@ -323,11 +155,8 @@ class FilemanagerController extends Controller
         $this->routeFileByType($input, $fileType);
     }
 
-    /**
-     * @param boolean $ajax
-     */
-    public function setAjax($ajax)
+    private function getMimes()
     {
-        $this->ajax = $ajax;
+        return $this->mimes;
     }
 }
