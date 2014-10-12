@@ -22,7 +22,7 @@
         //getModuleTranslation();
         button_file.on('click', openFileUpload);
         nav_link.on('click', createFolder);
-        foldersInput.on('blur', function () {
+        foldersInput.on('change', function () {
             editFolderName($(this));
         });
         foldersName.on('dblclick', function () {
@@ -35,7 +35,7 @@
         filesName.on('dblclick', function () {
             editFileName($(this));
         });
-        filesInput.on('blur', function () {
+        filesInput.on('change', function () {
             editFileName($(this));
         });
         filesLink.on('click', targetFile);
@@ -156,7 +156,7 @@
         if ($that === "undefined") {
             var $that = $(this);
         }
-        //$that.blur();
+        $that.blur();
         var data = {'name': $that.val()};
         $.ajax({
             url: 'ajax/file/update/' + $that.parents('.file').attr('data-id'),
@@ -206,7 +206,7 @@
         if ($that === "undefined") {
             var $that = $(this);
         }
-        //$that.blur();
+        $that.blur();
         var data = {'name': $that.val()};
         $.ajax({
             url: 'ajax/folder/update/' + $that.parents('.folder').attr('data-id'),
