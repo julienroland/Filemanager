@@ -22,28 +22,11 @@
         getModuleTranslation();
         button_file.on('click', openFileUpload);
         nav_link.on('click', createFolder);
+
         foldersEvents();
+        filesEvents();
 
-        filesName.on('dblclick', function () {
-            editFileName($(this));
-        });
-        filesInput.on('change', function () {
-            editFileName($(this));
-        });
-        filesLink.on('click', targetFile);
-        filesLink.on('blur', unTargetFile);
-        $('.file').draggable();
-        $('.folder').draggable();
-        $('.folder').droppable({
-            drop: function (e, ui) {
-                appendFileIntoFolder(ui.draggable, $(this));
-                $(this).addClass('ui-state-highlight');
-            },
-            over: function (e, ui) {
-                console.log('Do some anims');
-            }
-        });
-
+        dragAndDropEvent();
         fileUpload();
 
     });
@@ -91,7 +74,6 @@
         if (typeof $that === "undefined") {
             var $that = $(this);
         }
-        //$(this).parent().find('input.name').blur();
         displayInputFileName($that);
     }
     var displayInputFileName = function ($that) {
@@ -101,6 +83,12 @@
         $that.parents('.file').find('input.name').enterKey(function () {
             $(this).change();
         });
+        /* $that.parents('.file').find('input.name').on('blur',function () {
+         $(this).change();
+         });
+         $that.parents('.file').find('input.name').on('keydown',function () {
+         $(this).change();
+         });*/
         refreshHtmlFileNameValue($that);
     }
     var refreshHtmlFileNameValue = function ($that) {
@@ -108,14 +96,11 @@
         $that.parents('.file').find('div.name').html($that.parent().find('input.name').val());
 
     }
-    var displayInputFolderName = function ($that) {
-        console.log('edit');
+    var toggleFolderDivInput = function ($that) {
         $that.parents('.folder').find('input.name').toggleClass('hidden');
         $that.parents('.folder').find('div.name').toggleClass('hidden');
-        $that.parents('.folder').find('input.name').focus();
-        $that.parents('.folder').find('input.name').enterKey(function () {
-            $(this).change();
-        });
+    }
+    var displayInputFolderName = function ($that) {
         refreshHtmlFolderNameValue($that);
     }
     var editFolderName = function ($that) {
@@ -178,7 +163,8 @@
         if ($that === "undefined") {
             var $that = $(this);
         }
-        $that.blur();
+        console.log($that.val());
+        //$that.blur();
         var data = {'name': $that.val()};
         $.ajax({
             url: 'ajax/folder/update/' + $that.parents('.folder').attr('data-id'),
@@ -236,13 +222,18 @@
     }
     var foldersEvents = function (folder) {
         if (typeof folder === "undefined") {
-            console.log('basic event');
             foldersInput.on('change', function () {
                 editFolderName($(this));
+
+            });
+            foldersInput.on('blur', function () {
+                toggleFolderDivInput($(this));
+            });
+            foldersInput.enterKey(function () {
+                toggleFolderDivInput($(this));
             });
             foldersName.on('dblclick', function () {
-                console.log('ok');
-                editFolderName($(this));
+                toggleFolderDivInput($(this));
             });
             foldersLink.on('dblclick', openFolder);
             foldersLink.on('click', targetFolder);
@@ -256,7 +247,7 @@
                 displayInputFolderName($(this));
             });
             folder.find('input.name').enterKey(function () {
-                $(this).blur();
+                $(this).change();
             });
             folder.find('div.name').on('dblclick', function () {
                 editFolderName($(this));
@@ -265,6 +256,33 @@
             folder.find('a').on('click', targetFolder);
             folder.find('a').on('blur', unTargetFolder);
         }
+    }
+    var filesEvents = function (file) {
+        if (typeof file === "undefined") {
+            filesName.on('dblclick', function () {
+                editFileName($(this));
+            });
+            filesInput.on('change', function () {
+                editFileName($(this));
+            });
+            filesLink.on('click', targetFile);
+            filesLink.on('blur', unTargetFile);
+        } else {
+            console.log('file event');
+        }
+    }
+    var dragAndDropEvent = function () {
+        $('.file').draggable();
+        $('.folder').draggable();
+        $('.folder').droppable({
+            drop: function (e, ui) {
+                appendFileIntoFolder(ui.draggable, $(this));
+                $(this).addClass('ui-state-highlight');
+            },
+            over: function (e, ui) {
+                console.log('Do some anims');
+            }
+        });
     }
     var fileUpload = function () {
         file.fileupload({
