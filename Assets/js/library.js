@@ -19,7 +19,7 @@
         nav_link = $('#filemanager_library-popup .navigation a[data-request="create_folder"]');
 
     $(function () {
-        //getModuleTranslation();
+        getModuleTranslation();
         button_file.on('click', openFileUpload);
         nav_link.on('click', createFolder);
         foldersInput.on('change', function () {
