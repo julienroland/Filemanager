@@ -156,7 +156,7 @@
         if ($that === "undefined") {
             var $that = $(this);
         }
-        $that.blur();
+        //$that.blur();
         var data = {'name': $that.val()};
         $.ajax({
             url: 'ajax/file/update/' + $that.parents('.file').attr('data-id'),
