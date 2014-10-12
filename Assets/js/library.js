@@ -5,6 +5,7 @@
         button_file = $('#filemanager_library'),
         folder_finder = $('#folder_finder'),
         foldersName = $('.folder div.name'),
+        foldersLink = $('.folder a'),
         foldersInput = $('.folder input.name'),
         folders = [],
         files = [],
@@ -18,11 +19,18 @@
         nav_link = $('#filemanager_library-popup .navigation a[data-request="create_folder"]');
 
     $(function () {
-        getModuleTranslation();
+        //getModuleTranslation();
         button_file.on('click', openFileUpload);
         nav_link.on('click', createFolder);
-        foldersInput.on('blur', editFolderName);
-        foldersName.on('dblclick', editFolderName);
+        foldersInput.on('blur', function () {
+            editFolderName($(this));
+        });
+        foldersName.on('dblclick', function () {
+            editFolderName($(this));
+        });
+        foldersLink.on('dblclick', openFolder);
+        foldersLink.on('click', targetFolder);
+        foldersLink.on('blur', unTargetFolder);
 
         filesName.on('dblclick', function () {
             editFileName($(this));
@@ -62,6 +70,17 @@
         });
 
     });
+    var unTargetFolder = function () {
+        $(this).parents('.folder').removeClass('target');
+    }
+    var targetFolder = function (e) {
+        e.preventDefault();
+        $(this).focus();
+        $(this).parents('.folder').addClass('target');
+        $(this).enterKey(function () {
+            editFolderName($(this));
+        });
+    }
     var unTargetFile = function () {
         console.log('blur');
         $(this).parents('.file').removeClass('target');
@@ -71,9 +90,12 @@
         $(this).focus();
         $(this).parents('.file').addClass('target');
         $(this).enterKey(function () {
-            console.log('enter');
             editFileName($(this));
         });
+    }
+    var openFolder = function (e) {
+        e.preventDefault();
+        window.location.href = $(this).attr('href');
     }
     var appendFile = function (sString) {
         file_finder.append(sString);
@@ -88,7 +110,6 @@
         })
     }
     var editFileName = function ($that) {
-        console.log($that);
         if (typeof $that === "undefined") {
             var $that = $(this);
         }
@@ -99,10 +120,9 @@
         $that.parents('.file').find('input.name').toggleClass('hidden');
         $that.parents('.file').find('div.name').toggleClass('hidden');
         $that.parents('.file').find('input.name').focus();
-
         $that.parents('.file').find('input.name').enterKey(function () {
             $(this).blur();
-        })
+        });
         refreshHtmlFileNameValue($that);
     }
     var refreshHtmlFileNameValue = function ($that) {
@@ -110,12 +130,21 @@
         $that.parents('.file').find('div.name').html($that.parent().find('input.name').val());
 
     }
-
-    var editFolderName = function (e) {
-        e.preventDefault();
-        $(this).parent().find('input.name').toggleClass('hidden');
-        $(this).parent().find('div.name').toggleClass('hidden');
-        refreshHtmlFolderNameValue($(this));
+    var displayInputFolderName = function () {
+        console.log('edit');
+        $that.parents('.folder').find('input.name').toggleClass('hidden');
+        $that.parents('.folder').find('div.name').toggleClass('hidden');
+        $that.parents('.folder').find('input.name').focus();
+        $that.parents('.folder').find('input.name').enterKey(function () {
+            $(this).blur();
+        });
+        refreshHtmlFolderNameValue($that);
+    }
+    var editFolderName = function ($that) {
+        if (typeof $that === "undefined") {
+            var $that = $(this);
+        }
+        displayInputFolderName($that)
     }
     var displayInputFolderName = function ($that) {
         $that.parent().find('input.name').toggleClass('hidden');
@@ -171,12 +200,13 @@
     }
     var refreshHtmlFolderNameValue = function ($that) {
         refreshFolderNameValue($that);
-        $that.parent().find('div.name').html($that.parent().find('input.name').val());
+        $that.parents('.folder').find('div.name').html($that.parents('.folder').find('input.name').val());
     }
     var refreshFolderNameValue = function ($that) {
         if ($that === "undefined") {
             var $that = $(this);
         }
+        //$that.blur();
         var data = {'name': $that.val()};
         $.ajax({
             url: 'ajax/folder/update/' + $that.parents('.folder').attr('data-id'),
@@ -210,7 +240,9 @@
                 folder.find('input.name').on('change', function () {
                     refreshFolderNameValue($(this));
                 });
-                folder.find('input.name').on('dblclick', editFolderName);
+                folder.find('input.name').on('dblclick', function () {
+                    editFolderName($(this));
+                });
             }
         });
     }
@@ -218,6 +250,7 @@
 
     var openFileUpload = function (e) {
         e.preventDefault();
+        console.log('ok');
         file.click();
     }
     var getModuleTranslation = function () {
