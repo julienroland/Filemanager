@@ -2,6 +2,7 @@
 
 use Modules\Filemanager\Entities\File;
 use Modules\Filemanager\Entities\FileDirectory;
+use Modules\Filemanager\Entities\FileVariant;
 use Modules\Filemanager\Repositories\FileRepository;
 
 class EloquentFileRepository implements FileRepository
@@ -40,6 +41,16 @@ class EloquentFileRepository implements FileRepository
         return $file;
     }
 
+    public function delete($id)
+    {
+        $file = File::find($id);
+        $file->fileDirectory()->detach();
+        FileVariant::where('file_id', $id)->delete();
+        $file->delete();
+
+        return $file;
+    }
+
     public function append($file_id, $folder_id)
     {
         $dir = FileDirectory::find($folder_id);
@@ -65,8 +76,8 @@ class EloquentFileRepository implements FileRepository
             $file = $file->whereHas('fileDirectory', function ($query) use ($id) {
                 $query->where('file_directory_id', $id);
             });
-        }else{
-            $file = $file->has('fileDirectory','=',0);
+        } else {
+            $file = $file->has('fileDirectory', '=', 0);
         }
         return $file->get();
     }

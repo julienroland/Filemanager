@@ -4,6 +4,7 @@
            background: green;
        }</style>
 <?php echo Module::style('filemanager','css/style.css'); ?>
+<?php echo Module::style('filemanager','css/jquery.contextMenu.css'); ?>
 
 <div id="{{Config::get('filemanager::config.library_class')}}-popup" class="{{Config::get('filemanager::config.library_class')}}-popup">
 
@@ -28,3 +29,5 @@
 <?php echo Module::script('filemanager','js/jquery-ui.js');?>
 <?php echo Module::script('filemanager','js/ajaxUpload.js');?>
 <?php echo Module::script('filemanager','js/library.js');?>
+<?php echo Module::script('filemanager','js/jquery.contextMenu.js');?>
+<?php echo Module::script('filemanager','js/jquery.ui.position.js');?>

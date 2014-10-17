@@ -23,7 +23,7 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'before' => 'Laravel
                     ]);
 
                 get('library', [
-                    'as'=>'filemanager.library',
+                    'as' => 'filemanager.library',
                     'uses' => 'FileController@outputLibrary'
                 ]);
 
@@ -42,13 +42,16 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'before' => 'Laravel
                 ]);
 
 
-
                 get('ajax/folder/update/{id}', [
                     'uses' => 'DirectoryController@update'
                 ]);
 
                 get('ajax/file/update/{id}', [
                     'uses' => 'FileController@update'
+                ]);
+
+                get('ajax/file/delete/{id}', [
+                    'uses' => 'FileController@delete'
                 ]);
 
                 get('ajax/file/{file_id}/append/folder/{folder_id}', [

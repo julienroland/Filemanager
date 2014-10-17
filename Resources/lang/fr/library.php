@@ -7,5 +7,14 @@
         'next' => 'Aller à la page suivant',
         'folder' => [
             'default_name' => 'Nouveau dossier',
+        ],
+        'file' => [
+            'menu' => [
+                'open' => 'Ouvrir',
+                'link' => 'Lié',
+                'edit' => 'Modifier',
+                'delete' => 'Supprimer',
+            ]
         ]
+
     ];

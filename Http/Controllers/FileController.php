@@ -41,4 +41,9 @@ class FileController extends Controller
         return $this->file->append($file_id, $folder_id);
     }
 
+    public function delete($id)
+    {
+        return $this->file->delete($id);
+    }
+
 }

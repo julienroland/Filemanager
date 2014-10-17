@@ -8,10 +8,10 @@
         foldersLink = $('.folder a'),
         foldersInput = $('.folder input.name'),
         folders = [],
-        files = [],
 
         filesName = $('.file div.name'),
         filesLink = $('.file a'),
+        files = $('.file'),
         filesInput = $('.file input.name'),
         file_finder = $('#file_finder'),
         filemanager_asset = '/filemanager/',
@@ -28,6 +28,8 @@
 
         dragAndDropEvent();
         fileUpload();
+
+        fileContextMenu();
 
     });
 
@@ -144,7 +146,6 @@
             file.name = oData.name;
             file.url = oData.file_variant[0].url;
             //file.fileType.icon = oData.file_type.icon;
-            files.push(file);
 
             var file_output = '<div class="file" data-id="' + file.id + '"><div class="icon"><a href="javascript:void(0)"><img src="' + filemanager_asset + file.url + '" alt=""/></a> </div> <div class="name">' + file.name + ' </div> <input type="text" data-request="edit_file_name" class="name hidden" value="' + file.name + '"/> </div>';
 
@@ -235,6 +236,47 @@
             folder.find('a').on('blur', unTargetFolder);
         }
     }
+    var openContextMenu = function ($that) {
+        var sMenu = appendContextualMenu($that);
+        filesMenuEvents($(sMenu));
+    }
+    var appendContextualMenu = function ($that) {
+        var sMenu = outputContextualMenu($that);
+        $that.append(sMenu);
+        return sMenu;
+    }
+    var outputContextualMenu = function ($that) {
+        return '<div class="filemanager_contextualMenu" data-id="' + $that.attr('data-id') + '">' +
+        '<ul>' +
+        '<li>' +
+        '<a data-request="file_open" href="javascript:void(0)">' + oLang.library.file.menu.open + '</a>' +
+        '</li>' +
+        '<li>' +
+        '<a data-request="file_edit" href="javascript:void(0)">' + oLang.library.file.menu.edit + '</a>' +
+        '</li>' +
+        '<li>' +
+        '<a data-request="file_delete" href="javascript:void(0)">' + oLang.library.file.menu.delete + '</a>' +
+        '</li>' +
+        '</ul>' +
+        '</div>';
+    }
+    var filesMenuEvents = function (menu) {
+        console.log('ok');
+        menu.find('a [data-request="file_delete"]').on('click', function () {
+            deleteFile($(this));
+        });
+    }
+    var deleteFile = function ($that) {
+        console.log($that);
+        $.ajax({
+            url: 'ajax/file/delete/' + $that.attr('data-id'),
+            dataType: 'json',
+            success: function (oData) {
+                console.log(oData);
+                removeFileFromView($that);
+            }
+        });
+    }
     var filesEvents = function (file) {
         if (typeof file === "undefined") {
             filesInput.on('change', function () {
@@ -254,7 +296,6 @@
             filesLink.on('click', targetFile);
             filesLink.on('blur', unTargetFile);
         } else {
-            console.log('file event');
             file.find('input.name').on('change', function () {
                 editFileName($(this));
             });
@@ -294,6 +335,24 @@
             }
         });
     }
+    var fileContextMenu = function () {
+        $.contextMenu({
+            selector: '.file',
+            callback: function (key, options) {
+                if (key == "delete") {
+                    deleteFile(this);
+                }
+            },
+            items: {
+                'edit': {name: oLang.library.file.menu.edit, icon: "edit"},
+                'delete': {name: oLang.library.file.menu.delete, icon: "delete"}
+            }
+        });
+
+        $('.file').on('click', function () {
+            console.log(this);
+        });
+    }
     var fileUpload = function () {
         file.fileupload({
             url: 'ajax/upload',
@@ -321,6 +380,20 @@
             $(this).on('keydown', function (e) {
                 var keycode = e.which;
                 if (keycode == '13') {
+                    fnc.call(this, e);
+                }
+            });
+        })
+    }
+    $.fn.rightClick = function (fnc) {
+
+        return $.each(this, function () {
+            $(this).on('mousedown', function (e) {
+                var keycode = e.which;
+                if (keycode == '3') {
+                    e.preventDefault();
+                    console.log('ok');
+
                     fnc.call(this, e);
                 }
             });
