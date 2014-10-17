@@ -211,4 +211,9 @@ abstract class AbstractFileManager
     {
         return $this->file->type;
     }
+
+    protected function setFileSize($file)
+    {
+        $this->file->size = $file->getClientSize();
+    }
 }

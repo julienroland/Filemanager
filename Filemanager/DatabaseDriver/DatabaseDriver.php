@@ -97,7 +97,7 @@ class DatabaseDriver
             'virtual_url' => $path['virtual_path'],
             'width' => $file->width(),
             'height' => $file->height(),
-            'size' => null,
+            'size' => $file->size,
             'timestamp' => $file->timestamp,
             'external_url' => null,
             'file_access_type_id' => $this->getAccessType($provider),
@@ -116,7 +116,7 @@ class DatabaseDriver
             'url' => $path['pathfilename'],
             'width' => $file->width(),
             'height' => $file->height(),
-            'size' => null,
+            'size' => $file->size,
             'file_id' => $file->id,
         ]);
 

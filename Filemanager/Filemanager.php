@@ -92,10 +92,12 @@ class FileManager extends AbstractFileManager
         $this->file->type = $type;
         $this->file->params = $params;
         $this->file->name = $file->getClientOriginalName();
+        $this->setFileSize($file);
         $this->file->extension = $file->getClientOriginalExtension();
 
         return $this->file;
     }
+
     private function isRequestAndSetFile($fileOrRequest)
     {
         if ($fileOrRequest instanceof UploadRequest) {
