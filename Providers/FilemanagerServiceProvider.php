@@ -93,6 +93,10 @@ class FilemanagerServiceProvider extends ServiceProvider
             'Modules\Filemanager\Repositories\Eloquent\EloquentFileAccessTypeRepository'
         );
         $this->app->bind(
+            'Modules\Filemanager\Repositories\ThumbControllerRepository',
+            'Modules\Filemanager\Repositories\Eloquent\EloquentThumbControllerRepository'
+        );
+        $this->app->bind(
             'Modules\Filemanager\Repositories\ImageManipulationRepository',
             'Modules\Filemanager\Repositories\ImageIntervention\ImageInterventionImageManipulationRepository'
         );

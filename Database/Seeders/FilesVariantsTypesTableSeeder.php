@@ -17,47 +17,13 @@ class FilesVariantsTypesTableSeeder extends Seeder
         Model::unguard();
         $data = [
             [
-                'name' => 'Resize',
-                'slug' => 'resize',
-                'value' => '{"width":"300","height":"300","aspect":true}',
-                'prefix' => '-resize',
+                'name' => 'Icon',
+                'slug' => 'icon',
+                'description' => 'Icones de la bibliothèque d\'image',
+                'value' => '{"width":"60","height":"60","aspect":false}',
+                'prefix' => '-icon',
             ],
-            [
-                'name' => 'Crop',
-                'slug' => 'crop',
-                'value' => '{"width":"300","height":"300","x":"0","y":"0"}',
-                'prefix' => '-crop',
-            ],
-            [
-                'name' => 'Avatar',
-                'slug' => 'avatar',
-                'value' => '{"width":"90","height":"90"}',
-                'prefix' => '-avatar',
-            ],
-            [
-                'name' => 'Greyscale',
-                'slug' => 'greyscale',
-                'value' => null,
-                'prefix' => '-greyscale',
-            ],
-            [
-                'name' => 'Saturation',
-                'slug' => 'saturation',
-                'value' => '{"level":0}',
-                'prefix' => '-saturation',
-            ],
-            [
-                'name' => 'Blur',
-                'slug' => 'blur',
-                'value' => '{"amount":50}',
-                'prefix' => '-blur',
-            ],
-            [
-                'name' => 'Circle',
-                'slug' => 'circle',
-                'value' => '{"radius":"300","x":"200","y":"#FF000"}',
-                'prefix' => '-circle',
-            ]
+
         ];
 
         foreach ($data as $variantType) {

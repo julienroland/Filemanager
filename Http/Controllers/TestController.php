@@ -23,10 +23,12 @@ class TestController extends Controller
         //$file = $request->file(Config::get('filemanager::config.file_name'));
         //$type = $request->get(Config::get('filemanager::config.hidden_field_name'));
 
-        $this->filemanager
+        $file = $this->filemanager
             ->make($request)
-            ->resize(['width' => 100, 'height' => 100, 'ratio' => true])
+            ->variant(['resize' => ['width' => 100, 'height' => 100, 'ratio' => true]])
             ->save();
+
+        //$class->attach($file);
 
 
     }

@@ -28,7 +28,17 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'before' => 'Laravel
 
                 get('library/thumb', [
                     'as' => 'filemanager.create.manager',
-                    'uses' => 'FileController@thumb'
+                    'uses' => 'ThumbController@index'
+                ]);
+
+                get('library/thumb/create', [
+                    'as' => 'filemanager.thumb.create',
+                    'uses' => 'ThumbController@create'
+                ]);
+
+                post('library/thumb/store', [
+                    'as' => 'filemanager.thumb.store',
+                    'uses' => 'ThumbController@store'
                 ]);
 
                 post('ajax/upload', [
