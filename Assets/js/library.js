@@ -31,6 +31,21 @@
 
     });
 
+    var createFolder = function () {
+        $.ajax({
+            url: 'ajax/folder/create',
+            dataType: 'json',
+            data: {'name': oLang.library.folder.default_name},
+            success: function (oData) {
+                var folder = $(displayFolder(oData));
+                console.log(folder);
+                folder_finder.append(folder);
+                toggleFolderDivInput(folder.find('input.name'))
+                folder.find('input.name').focus();
+                foldersEvents(folder);
+            }
+        });
+    }
     var unTargetFolder = function () {
         $(this).parents('.folder').removeClass('target');
     }
@@ -169,23 +184,6 @@
             }
         });
     }
-    var createFolder = function () {
-        $.ajax({
-            url: 'ajax/folder/create',
-            dataType: 'json',
-            data: {'name': oLang.library.folder.default_name},
-            success: function (oData) {
-                var folder = $(displayFolder(oData));
-                console.log(folder);
-                folder_finder.append(folder);
-                displayInputFolderName(folder.find('input.name'))
-                folder.find('input.name').focus();
-                foldersEvents(folder);
-            }
-        });
-    }
-
-
     var openFileUpload = function (e) {
         e.preventDefault();
         console.log('ok');
@@ -257,6 +255,22 @@
             filesLink.on('blur', unTargetFile);
         } else {
             console.log('file event');
+            file.find('input.name').on('change', function () {
+                editFileName($(this));
+            });
+            file.find('div.name').on('dblclick', function () {
+                toggleFileDivInput($(this));
+            });
+            file.find('input.name').on('blur', function () {
+                console.log('file blur');
+                toggleFileDivInput($(this));
+            });
+            file.find('input.name').enterKey(function () {
+                toggleFileDivInput($(this));
+            });
+
+            file.find('a').on('click', targetFile);
+            file.find('a').on('blur', unTargetFile);
         }
     }
     var dragAndDropEvent = function () {
@@ -279,7 +293,11 @@
             done: function (e, oData) {
                 console.log(oData.result);
                 //je return pas d'obj pour recup la file
-                appendFile(displayFile(oData.result));
+                var $file = $(displayFile(oData.result));
+                console.log($file);
+                appendFile($file);
+                toggleFileDivInput($file.find('div.name'));
+                filesEvents($file);
             },
             progressall: function (e, data) {
                 var progress = parseInt(data.loaded / data.total * 100, 10);
