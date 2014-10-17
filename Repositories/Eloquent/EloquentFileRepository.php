@@ -54,15 +54,19 @@ class EloquentFileRepository implements FileRepository
     public function getByDirectories($id = null)
     {
         $file = File::with([
-            'fileDirectory' => function ($query) use ($id) {
+            /*'fileDirectory' => function ($query) use($id){
                 $query->where('file_directory_id', $id);
-            },
+            },*/
             'fileVariant' => function ($query) {
                 $query->icon();
             }
         ]);
         if (!is_null($id)) {
-            $file = $file->Has('fileDirectory');
+            $file = $file->whereHas('fileDirectory', function ($query) use ($id) {
+                $query->where('file_directory_id', $id);
+            });
+        }else{
+            $file = $file->has('fileDirectory','=',0);
         }
         return $file->get();
     }
