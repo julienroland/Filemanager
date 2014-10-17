@@ -35,4 +35,13 @@ class EloquentFileDirectoryRepository implements FileDirectoryRepository
         return $folder;
 
     }
+
+    public function append($folder1_id, $folder2_id = null)
+    {
+        $folder = FileDirectory::find($folder1_id);
+        $folder->parent_id = $folder2_id;
+        $folder->save();
+
+        return $folder;
+    }
 }

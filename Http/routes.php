@@ -60,6 +60,10 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'before' => 'Laravel
                     'uses' => 'FileController@append'
                 ]);
 
+                get('ajax/folder/{file_id}/append/folder/{folder_id}', [
+                    'uses' => 'DirectoryController@append'
+                ]);
+
                 /* End uploads */
             });
     });

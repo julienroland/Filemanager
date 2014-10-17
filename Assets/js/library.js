@@ -79,14 +79,24 @@
     var appendFile = function (sString) {
         file_finder.append(sString);
     }
-    var appendFileIntoFolder = function (file, folder) {
+    var appendFileOrFolderIntoFolder = function (fileOrFolder, folder) {
         console.log('drop');
-        $.ajax({
-            url: 'ajax/file/' + file.attr('data-id') + '/append/folder/' + folder.attr('data-id'),
-            success: function (oData) {
-                console.log(oData);
-            }
-        })
+        console.log(fileOrFolder);
+        if (fileOrFolder.hasClass('file')) {
+            $.ajax({
+                url: 'ajax/file/' + fileOrFolder.attr('data-id') + '/append/folder/' + folder.attr('data-id'),
+                success: function (oData) {
+                    console.log(oData);
+                }
+            });
+        } else if (fileOrFolder.hasClass('folder')) {
+            $.ajax({
+                url: 'ajax/folder/' + fileOrFolder.attr('data-id') + '/append/folder/' + folder.attr('data-id'),
+                success: function (oData) {
+                    console.log(oData);
+                }
+            });
+        }
     }
     var editFileName = function ($that) {
         if (typeof $that === "undefined") {
@@ -326,7 +336,7 @@
         $('.folder').draggable();
         $('.folder').droppable({
             drop: function (e, ui) {
-                appendFileIntoFolder(ui.draggable, $(this));
+                appendFileOrFolderIntoFolder(ui.draggable, $(this));
                 removeFileFromView(ui.draggable);
                 $(this).addClass('ui-state-highlight');
             },
@@ -367,10 +377,7 @@
             url: 'ajax/upload',
             dataType: 'json',
             done: function (e, oData) {
-                console.log(oData.result);
-                //je return pas d'obj pour recup la file
                 var $file = $(displayFile(oData.result));
-                console.log($file);
                 appendFile($file);
                 toggleFileDivInput($file.find('div.name'));
                 filesEvents($file);

@@ -12,4 +12,6 @@ interface FileDirectoryRepository
 
     public function update($id, $request);
 
+    public function append($folder1_id, $folder2_id);
+
 }

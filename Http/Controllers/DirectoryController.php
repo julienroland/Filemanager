@@ -26,4 +26,9 @@ class DirectoryController extends Controller
         return $this->directory->update($id, $request);
     }
 
+    public function append($folder1_id, $folder2_id)
+    {
+        return $this->directory->append($folder1_id, $folder2_id);
+    }
+
 }
