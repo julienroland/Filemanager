@@ -342,8 +342,16 @@
                 if (key == "delete") {
                     deleteFile(this);
                 }
+                if (key == "edit") {
+                    toggleFileDivInput(this.find('div.name'));
+                }
+                if (key == "info") {
+                    //edit/show file informations
+                }
             },
             items: {
+                'link': {name: oLang.library.file.menu.link, icon: "add"},
+                'info': {name: oLang.library.file.menu.infos, icon: "paste"},
                 'edit': {name: oLang.library.file.menu.edit, icon: "edit"},
                 'delete': {name: oLang.library.file.menu.delete, icon: "delete"}
             }

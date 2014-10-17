@@ -14,6 +14,7 @@
                 'link' => 'Lié',
                 'edit' => 'Modifier',
                 'delete' => 'Supprimer',
+                'infos' => 'Informations',
             ]
         ]
 
