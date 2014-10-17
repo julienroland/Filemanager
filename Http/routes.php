@@ -16,22 +16,25 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'before' => 'Laravel
                 post('/test', ['as' => 'test', 'uses' => 'TestController@create']);
 
                 /* Uploads */
-                post('upload',
-                    [
-                        'as' => Config::get('filemanager::config.module_name') . '.upload',
-                        'uses' => 'FileManagerController@upload'
-                    ]);
+                post('upload', [
+                    'as' => Config::get('filemanager::config.module_name') . '.upload',
+                    'uses' => 'FileManagerController@upload'
+                ]);
 
                 get('library', [
                     'as' => 'filemanager.library',
                     'uses' => 'FileController@outputLibrary'
                 ]);
 
-                post('ajax/upload',
-                    [
-                        'as' => Config::get('filemanager::config.module_name') . '.ajax.upload',
-                        'uses' => 'FilemanagerController@upload'
-                    ]);
+                get('library/thumb', [
+                    'as' => 'filemanager.create.manager',
+                    'uses' => 'FileController@thumb'
+                ]);
+
+                post('ajax/upload', [
+                    'as' => Config::get('filemanager::config.module_name') . '.ajax.upload',
+                    'uses' => 'FilemanagerController@upload'
+                ]);
 
                 get('ajax/getTranslation', [
                     'uses' => 'TranslationController@all'
@@ -40,7 +43,6 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'before' => 'Laravel
                 get('ajax/folder/create', [
                     'uses' => 'DirectoryController@create'
                 ]);
-
 
                 get('ajax/folder/update/{id}', [
                     'uses' => 'DirectoryController@update'

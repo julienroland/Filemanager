@@ -1,4 +1,5 @@
 <?php return
     [
-        'upload' => 'Envoyer'
+        'upload' => 'Envoyer',
+        'home' => 'Accueil',
     ];

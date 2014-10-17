@@ -12,6 +12,7 @@
 <a href="javascript:history.back()">{{trans('filemanager::library.back')}}</a>
 <a href="javascript:history.forward()">{{trans('filemanager::library.next')}}</a>
 <div class="finder">
+@include('filemanager::layout.breadcrumb')
 <div class="folder_finder" id="folder_finder">
 
 @yield('folders')
@@ -23,6 +24,7 @@
 
 </div>
 </div>
+<a href="{{route('filemanager.create.manager')}}">{{trans('filemanager::feature.thumb.manage')}}</a>
 </div>
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>

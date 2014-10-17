@@ -4,6 +4,8 @@
 interface FileDirectoryRepository
 {
 
+    public function find($id);
+
     public function get($id = null);
 
     public function create($name = null);

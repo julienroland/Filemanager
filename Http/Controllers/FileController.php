@@ -27,8 +27,14 @@ class FileController extends Controller
         $id = $request->get('directory');
         $files = $this->file->getByDirectories($id);
         $directories = $this->directory->get($id);
+        $currentDirectory = $this->directory->find($id);
         return view('filemanager::popup.library')
-            ->with(compact('files', 'directories'));
+            ->with(compact('files', 'directories', 'currentDirectory'));
+    }
+
+    public function thumb()
+    {
+        return view('filemanager::popup.thumb');
     }
 
     public function update($id, Request $request)

@@ -45,6 +45,7 @@
                 toggleFolderDivInput(folder.find('input.name'))
                 folder.find('input.name').focus();
                 foldersEvents(folder);
+                dragAndDropEvent();
             }
         });
     }
@@ -373,6 +374,7 @@
                 appendFile($file);
                 toggleFileDivInput($file.find('div.name'));
                 filesEvents($file);
+                dragAndDropEvent();
             },
             progressall: function (e, data) {
                 var progress = parseInt(data.loaded / data.total * 100, 10);
