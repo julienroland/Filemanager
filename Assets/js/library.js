@@ -273,16 +273,24 @@
             file.find('a').on('blur', unTargetFile);
         }
     }
+    var removeFileFromView = function ($that) {
+        $that.addClass('deleted').delay(1000).remove();
+    }
+    var folderDropAnim = function ($that) {
+        $that.addClass('drop-animate').delay(1000).remove();
+    }
     var dragAndDropEvent = function () {
         $('.file').draggable();
         $('.folder').draggable();
         $('.folder').droppable({
             drop: function (e, ui) {
                 appendFileIntoFolder(ui.draggable, $(this));
+                removeFileFromView(ui.draggable);
                 $(this).addClass('ui-state-highlight');
             },
             over: function (e, ui) {
                 console.log('Do some anims');
+                folderDropAnim(ui.draggable);
             }
         });
     }
