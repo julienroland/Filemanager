@@ -43,7 +43,7 @@ class OutputFileForm extends FileForm
 
     protected function outputInputFileMultipleTemplate($type, $params = null, $type2 = null)
     {
-        echo $this->openTag() . $this->inputTag() . ' ' . $this->type() . ' ' . $this->nameMultipleFile() . ' ' . $this->classes() . ' ' . $this->id() . ' ' . $this->multipleAttr() . ' ' . $this->inlineCloseTag();
+        echo $this->openTag() . $this->inputTag() . ' ' . $this->type() . ' ' . $this->nameMultipleFile() . ' ' . $this->classes('hidden') . ' ' . $this->id() . ' ' . $this->multipleAttr() . ' ' . $this->fileMultiple() . $this->inlineCloseTag();
         echo $this->outputHiddenFieldTemplate($type, $params, $type2);
     }
 
@@ -105,9 +105,14 @@ class OutputFileForm extends FileForm
 
     private function params($params = null)
     {
-        if(!is_null($params)){
-            return 'data-form-data='.json_encode($params);
+        if (!is_null($params)) {
+            return 'data-form-data=' . json_encode($params);
         }
+    }
+
+    private function fileMultiple()
+    {
+        return 'multiple="true"';
     }
 
 

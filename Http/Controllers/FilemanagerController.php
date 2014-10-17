@@ -3,8 +3,6 @@
 use Illuminate\Routing\Controller;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Response;
-use Intervention\Image\Facades\Image;
 use Laracasts\Flash\FlashNotifier;
 use Modules\Filemanager\Filemanager\FileManager;
 use Modules\Filemanager\Http\Requests\UploadRequest;

@@ -47,7 +47,7 @@ class FileForm
 
     protected function nameMultipleFile()
     {
-        return $this->nameAttr() . Config::get('filemanager::config.file_name') . '[]';
+        return $this->nameAttr() . Config::get('filemanager::config.file_name');
     }
 
     protected function type()

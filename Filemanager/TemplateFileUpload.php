@@ -47,9 +47,11 @@ class TemplateFileUpload
         return $button . $file;
     }
 
-    public function images()
+    public function images($params = null)
     {
-        return $this->outputFile->createInputMultipleFile('image');
+        $button = $this->outputFile->createButtonLibrary('image');
+        $file = $this->outputFile->createInputMultipleFile('image', $params);
+        return $button . $file;
     }
 
     public function audio()
