@@ -1,6 +1,7 @@
 <?php return
     [
         'upload' => 'Envoyer',
+        'library' => 'Parcourir la bibliothèque',
         'home' => 'Accueil',
         'tag' => 'Tag',
         'title' => 'Titre',

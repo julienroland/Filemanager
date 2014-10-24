@@ -4,7 +4,6 @@ use Illuminate\Routing\Controller;
 use Modules\Filemanager\Http\Requests\ThumbRequest;
 use Modules\Filemanager\Repositories\ThumbControllerRepository;
 use Modules\Filemanager\Thumb\Thumb;
-use Pingpong\Modules\Facades\Module;
 
 class ThumbController extends Controller
 {
@@ -22,10 +21,9 @@ class ThumbController extends Controller
     public function index()
     {
         $thumbs = $this->thumbApi->all();
-        $modules = Module::all();
-        $this->thumb->get();
+        dd($this->thumb->get());
         return view('filemanager::popup.thumb.index')
-            ->compact(array('thumbs','modules'));
+            ->with(compact(array('thumbs','modules')));
     }
 
     public function create()

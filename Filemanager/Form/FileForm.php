@@ -42,34 +42,48 @@ class FileForm
 
     protected function nameAttr()
     {
-        return 'name=';
+        return 'name="';
     }
+
+    protected function value($value = '')
+    {
+        return 'value="' . $value . '"';
+    }
+
 
     protected function nameMultipleFile()
     {
-        return $this->nameAttr() . Config::get('filemanager::config.file_name');
+        return $this->nameAttr() . Config::get('filemanager::config . file_name');
     }
 
-    protected function type()
+    protected function type($type = null)
     {
-        return 'type="' . $this->type . '"';
+        if (is_null($type)) {
+            $type = $this->type;
+        }
+        return 'type = "' . $type . '"';
     }
 
     protected function id($id = null)
     {
-        $id = is_null($id) ? Config::get('filemanager::config.file_name') : $id;
-        return 'id="' . $id . '"';
+        $id = is_null($id) ? Config::get('filemanager::config . file_name') : $id;
+        return 'id = "' . $id . '"';
     }
 
     protected function classes($class = null)
     {
-        $class = is_null($class) ? Config::get('filemanager::config.classes_names') : $class;
+        $class = is_null($class) ? Config::get('filemanager::config . classes_names') : $class;
         return 'class="' . $class . '"';
     }
 
     public function multipleAttr()
     {
         return 'multiple';
+    }
+
+    protected function fileMultiple()
+    {
+        return 'multiple = "true"';
     }
 
 

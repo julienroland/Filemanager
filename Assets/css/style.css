@@ -2,3 +2,9 @@
     position: absolute;
     left:-99999px;
 }
+.file{
+    display: block;
+    width: 100px;
+    height: 100px;
+    float: left;
+}

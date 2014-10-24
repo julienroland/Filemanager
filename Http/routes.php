@@ -13,7 +13,7 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'before' => 'Laravel
                     return view('filemanager::test');
                 });
 
-                post('/test', ['as' => 'test', 'uses' => 'TestController@create']);
+                post('test', ['as' => 'test', 'uses' => 'TestController@create']);
 
                 /* Uploads */
                 post('upload', [

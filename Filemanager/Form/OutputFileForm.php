@@ -24,16 +24,30 @@ class OutputFileForm extends FileForm
         return $this->outputInputFileTemplate($type, $params, $type2);
     }
 
+    public function createInputHidden($formName, $params)
+    {
+        echo $this->outputHiddenFieldTemplate(null, $params, null, $formName);
+    }
+
     public function createInputMultipleFile($type, $params = null, $type2 = null)
     {
         return $this->outputInputFileMultipleTemplate($type, $params, $type2);
     }
 
-    public function createButtonLibrary($type, $type2 = null)
+    public function createButtonLibrary($type, $type2 = null, $formName = null, $label = null)
     {
-        return $this->outputButtonLibraryTemplate($type, $type2);
+        return $this->outputButtonLibraryTemplate($type, $type2, $formName, $label);
     }
 
+    public function outputJsOpenLibrary($button, $formName)
+    {
+        return $this->outputJsOpenLibraryTemplate($button);
+    }
+
+    private function outputJsOpenLibraryTemplate($button)
+    {
+        echo '<script type="text/javascript"> var button = document.getElementById("' . $button . '"); button.addEventListener("click",function(){ window.open("/filemanager/library");})</script>';
+    }
 
     protected function outputInputFileTemplate($type, $params = null, $type2)
     {
@@ -47,10 +61,22 @@ class OutputFileForm extends FileForm
         echo $this->outputHiddenFieldTemplate($type, $params, $type2);
     }
 
-    private function outputButtonLibraryTemplate($type, $type2)
+
+    private function outputButtonLibraryTemplate($type, $type2, $formName, $label)
     {
-        echo $this->openTag() . $this->buttonTag() . ' ' . $this->classes($this->config->get('filemanager::config.library_class')) . ' ' . $this->id($this->config->get('filemanager::config.library_class')) . $this->closeTag() . trans('filemanager::form.upload') . $this->buttonCloseTag();
-        //echo $this->outputHiddenFieldTemplate($type, $type2);
+        if (is_null($label)) {
+            $label = trans('filemanager::form.library');
+        }
+
+        if (is_null($formName)) {
+            $class = $this->config->get('filemanager::config.library_class');
+        } else {
+            $class = $formName . '_' . $this->config->get('filemanager::config.library_class');
+        }
+
+        echo $this->openTag() . $this->inputTag() . ' ' . $this->type('button') . ' ' . $this->classes($class) . ' ' . $this->id($class) . ' ' . $this->value($label) . $this->closeTag();
+
+        return $class;
     }
 
     private function openTag()
@@ -68,12 +94,14 @@ class OutputFileForm extends FileForm
         return '/>';
     }
 
-    private function outputHiddenFieldTemplate($value, $params = null, $type = null)
+    private function outputHiddenFieldTemplate($value, $params = null, $type = null, $name = null)
     {
         $inputHidden = '';
-
+        if (is_null($name)) {
+            $name = $this->config->get('filemanager::config.hidden_field_name');
+        }
         $value = $this->createValueType($value, $type);
-        $inputHidden .= '<input type="hidden" ' . $this->nameAttr() . $this->config->get('filemanager::config.hidden_field_name') . ' value="' . $value . '"/>';
+        $inputHidden .= '<input type="hidden" ' . $this->nameAttr() . $name . '" value="' . $value . '"/>';
 
         if (!is_null($params)) {
             foreach ($params as $name => $value) {
@@ -81,7 +109,6 @@ class OutputFileForm extends FileForm
             }
 
         }
-
         return $inputHidden;
     }
 
@@ -93,10 +120,6 @@ class OutputFileForm extends FileForm
         return $value;
     }
 
-    private function value($trans)
-    {
-        return 'value="' . $trans . '"';
-    }
 
     private function buttonCloseTag()
     {
@@ -109,11 +132,5 @@ class OutputFileForm extends FileForm
             return 'data-form-data=' . json_encode($params);
         }
     }
-
-    private function fileMultiple()
-    {
-        return 'multiple="true"';
-    }
-
 
 }

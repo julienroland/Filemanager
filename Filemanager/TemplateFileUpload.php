@@ -54,6 +54,31 @@ class TemplateFileUpload
         return $button . $file;
     }
 
+    public function attachImage($formName = null, $label = null, $params = null)
+    {
+        $button = $this->outputFile->createButtonLibrary('image', null, $formName, $label);
+        $js = $this->outputFile->outputJsOpenLibrary($button, $formName);
+        $file = $this->outputFile->createInputFile('image', $params);
+        $hidden = $this->outputFile->createInputHidden($formName, $params);
+    }
+
+    public function attachImages($formName = "image", $label = null, $params = null)
+    {
+        $button = $this->outputFile->createButtonLibrary('image', null, $label);
+        $file = $this->outputFile->createInputMultipleFile('image', $params);
+        $hidden = $this->outputFile->createInputHidden($formName, $params);
+
+        return $button . $file . $hidden;
+    }
+
+    public function library($params = null)
+    {
+        $button = $this->outputFile->createButtonLibrary('image');
+        $file = $this->outputFile->createInputFile('image', $params);
+        return $button . $file;
+    }
+
+
     public function audio()
     {
         return $this->outputFile->createInputFile('audio');
