@@ -1,4 +1,4 @@
-<?php  namespace Modules\Filemanager\Illuminate;
+<?php  namespace Modules\Filemanager\Repositories\Illuminate;
 
 use Modules\Filemanager\Repositories\FilesystemRepository;
 

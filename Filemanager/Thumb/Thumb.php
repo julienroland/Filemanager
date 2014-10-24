@@ -22,7 +22,7 @@ class Thumb
         $configPath = base_path() . '/Modules/Filemanager/Config/Config.php';
         $configdd = array('Thumb' => array('test-tumb' => array('width' => 300, 'height' => 200)));
         $test = $this->file->get($configPath);
-        dd(pathinfo($test));
+        dd($test);
         $test2 = "<?php\n\n return  ?>" . var_export($test . $configdd, true) . ";\n";
         $test = $this->file->put($test2);
         dd($test);
