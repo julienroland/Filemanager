@@ -15,6 +15,7 @@ class ThumbRequest extends FormRequest
         return [
             'tag'=>'required',
             'title'=>'required',
+            'modules'=>'required',
         ];
     }
 

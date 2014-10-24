@@ -19,7 +19,7 @@ class CreateFilesVariantsTypesTable extends Migration
             $table->string('slug');
             $table->text('description');
             $table->string('value')->nullable();
-            $table->string('prefix');
+            $table->string('prefix')->unique();
 
             $table->timestamps();
         });

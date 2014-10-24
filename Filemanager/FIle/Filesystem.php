@@ -18,6 +18,10 @@ class Filesystem
     {
         return $this->file->get($path);
     }
+    public function getRequire($path)
+    {
+        return $this->file->getRequire($path);
+    }
 
     public function exists($path)
     {

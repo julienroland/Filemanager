@@ -8,6 +8,8 @@ interface FilesystemRepository
 
     public function get($path);
 
+    public function getRequire($path);
+
 
     public function put($path, $contents);
 
