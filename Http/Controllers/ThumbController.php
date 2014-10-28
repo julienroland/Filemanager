@@ -1,7 +1,9 @@
 <?php namespace Modules\Filemanager\Http\Controllers;
 
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Routing\Redirector;
+use Modules\Filemanager\Http\Requests\ThumbEditRequest;
 use Modules\Filemanager\Http\Requests\ThumbRequest;
 use Modules\Filemanager\Repositories\ThumbControllerRepository;
 use Modules\Filemanager\Thumb\Thumb;
@@ -29,7 +31,6 @@ class ThumbController extends Controller
     {
         /*$thumbs = $this->thumbApi->all();*/
         $thumbs = $this->thumb->get();
-
         return view('filemanager::popup.thumb.index')
             ->with(compact(array('thumbs')));
     }
@@ -39,6 +40,13 @@ class ThumbController extends Controller
         $modules = Module::all();
         return view('filemanager::popup.thumb.create')
             ->with(compact('modules'));
+    }
+
+    public function edit(ThumbEditRequest $request)
+    {
+        $thumb = $this->thumb->find($request->get('module'), $request->get('thumb'));
+        $thumbs_available = $this->thumb->availables();
+        return view('filemanager::popup.thumb.edit')->with(compact('thumb'));
     }
 
     public function store(ThumbRequest $request)

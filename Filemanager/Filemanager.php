@@ -2,7 +2,7 @@
 
 use Carbon\Carbon;
 use Illuminate\Filesystem\Filesystem as Filesystem;
-use Illuminate\Support\Facades\Config;
+use Illuminate\Config\Repository as Configuration;
 use Illuminate\Support\Str;
 use Illuminate\Contracts\Filesystem\Factory as Flysystem;
 use Modules\Filemanager\Filemanager\Image\ImageManager;
@@ -19,13 +19,15 @@ class FileManager extends AbstractFileManager
         Filesystem $filesystem,
         ImageManager $image,
         Carbon $date,
-        Str $string
+        Str $string,
+        Configuration $config
     ) {
         $this->flysystem = $flysystem;
         $this->filesystem = $filesystem;
         $this->image = $image;
         $this->date = $date;
         $this->string = $string;
+        $this->configuration = $config;
     }
 
     public function make($fileOrRequest, $type = null, $params = null)
@@ -102,13 +104,13 @@ class FileManager extends AbstractFileManager
     {
         if ($fileOrRequest instanceof UploadRequest) {
 
-            if ($fileOrRequest->hasFile(Config::get('filemanager::config.file_name'))) {
-                $file = $fileOrRequest->file(Config::get('filemanager::config.file_name'));
+            if ($fileOrRequest->hasFile($this->configuration->get('filemanager::config.file_name'))) {
+                $file = $fileOrRequest->file($this->configuration->get('filemanager::config.file_name'));
                 $this->setFile($file);
 
-                if ($fileOrRequest->has(Config::get('filemanager::config.hidden_field_name'))) {
+                if ($fileOrRequest->has($this->configuration->get('filemanager::config.hidden_field_name'))) {
 
-                    $this->setFileType($fileOrRequest->get(Config::get('filemanager::config.hidden_field_name')));
+                    $this->setFileType($fileOrRequest->get($this->configuration->get('filemanager::config.hidden_field_name')));
                 }
 
                 return true;

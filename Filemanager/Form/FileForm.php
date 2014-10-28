@@ -37,12 +37,12 @@ class FileForm
 
     protected function name()
     {
-        return $this->nameAttr() . Config::get('filemanager::config.file_name');
+        return 'name="' . Config::get('filemanager::config.file_name') . '"';
     }
 
     protected function nameAttr()
     {
-        return 'name="';
+        return 'name = "';
     }
 
     protected function value($value = '')
@@ -53,7 +53,7 @@ class FileForm
 
     protected function nameMultipleFile()
     {
-        return $this->nameAttr() . Config::get('filemanager::config . file_name');
+        return $this->nameAttr() . $this->config->get('filemanager::config . file_name');
     }
 
     protected function type($type = null)
@@ -66,13 +66,13 @@ class FileForm
 
     protected function id($id = null)
     {
-        $id = is_null($id) ? Config::get('filemanager::config . file_name') : $id;
+        $id = is_null($id) ? $this->config->get('filemanager::config.file_name') : $id;
         return 'id = "' . $id . '"';
     }
 
     protected function classes($class = null)
     {
-        $class = is_null($class) ? Config::get('filemanager::config . classes_names') : $class;
+        $class = is_null($class) ? $this->config->get('filemanager::config . classes_names') : $class;
         return 'class="' . $class . '"';
     }
 

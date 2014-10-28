@@ -19,8 +19,9 @@
         'module_name' => 'Nom du module',
         'title' => 'Titre',
         'tag' => 'Clé',
+        'actions' => 'Actions',
         'variants_name' => 'Type(s) de(s) manipulation(s)',
-        'radius' => array(
+        'circle' => array(
             'intro' => 'Créer un cercle',
             'radius' => 'Rayon',
             'x' => 'Position en x',

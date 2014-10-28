@@ -198,7 +198,6 @@
     }
     var openFileUpload = function (e) {
         e.preventDefault();
-        console.log('ok');
         file.click();
     }
     var getModuleTranslation = function () {

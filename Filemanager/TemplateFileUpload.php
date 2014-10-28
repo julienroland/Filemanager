@@ -30,6 +30,11 @@ class TemplateFileUpload
         return $this->outputFile->createInputMultipleFile('file');
     }
 
+    public function thumbs($defaultValue = null)
+    {
+        return $this->outputFile->createThumbForm($defaultValue);
+    }
+
     public function dropbox($type)
     {
         return $this->outputFile->createInputFile('dropbox', $type);
@@ -75,7 +80,7 @@ class TemplateFileUpload
     {
         $button = $this->outputFile->createButtonLibrary('image');
         $file = $this->outputFile->createInputFile('image', $params);
-        return $button . $file;
+
     }
 
 

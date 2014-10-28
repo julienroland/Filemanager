@@ -108,6 +108,10 @@ class FilemanagerServiceProvider extends ServiceProvider
             'Modules\Filemanager\Repositories\FilesystemRepository',
             'Modules\Filemanager\Repositories\Illuminate\IlluminateFilesystemRepository'
         );
+        $this->app->bind(
+            'Modules\Filemanager\Repositories\ThumbRepository',
+            'Modules\Filemanager\Repositories\File\FileThumbRepository'
+        );
     }
 
     private function bindFacade($app)

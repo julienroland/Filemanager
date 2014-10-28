@@ -25,21 +25,26 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'before' => 'Laravel
                     'as' => 'filemanager.library',
                     'uses' => 'FileController@outputLibrary'
                 ]);
+                Route::group(['prefix' => 'library'], function () {
+                    get('thumb', [
+                        'as' => 'filemanager.create.manager',
+                        'uses' => 'ThumbController@index'
+                    ]);
+                    get('thumb/create', [
+                        'as' => 'filemanager.thumb.create',
+                        'uses' => 'ThumbController@create'
+                    ]);
+                    get('thumb/edit', [
+                        'as' => 'filemanager.thumb.edit',
+                        'uses' => 'ThumbController@edit'
+                    ]);
 
-                get('library/thumb', [
-                    'as' => 'filemanager.create.manager',
-                    'uses' => 'ThumbController@index'
-                ]);
+                    post('thumb/store', [
+                        'as' => 'filemanager.thumb.store',
+                        'uses' => 'ThumbController@store'
+                    ]);
 
-                get('library/thumb/create', [
-                    'as' => 'filemanager.thumb.create',
-                    'uses' => 'ThumbController@create'
-                ]);
-
-                post('library/thumb/store', [
-                    'as' => 'filemanager.thumb.store',
-                    'uses' => 'ThumbController@store'
-                ]);
+                });
 
                 post('ajax/upload', [
                     'as' => Config::get('filemanager::config.module_name') . '.ajax.upload',

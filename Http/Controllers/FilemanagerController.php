@@ -2,8 +2,8 @@
 
 use Illuminate\Routing\Controller;
 use Illuminate\Routing\Redirector;
-use Illuminate\Support\Facades\Config;
 use Laracasts\Flash\FlashNotifier;
+use Illuminate\Config\Repository as Configuration;
 use Modules\Filemanager\Filemanager\FileManager;
 use Modules\Filemanager\Http\Requests\UploadRequest;
 use Modules\Filemanager\Http\Requests\AjaxUploadRequest;
@@ -80,6 +80,10 @@ class FilemanagerController extends Controller
      * @var ImageManager
      */
     private $image;
+    /**
+     * @var Configuration
+     */
+    private $config;
 
     /**
      * @param FilemanagerControllerRepository $filemanager
@@ -92,13 +96,15 @@ class FilemanagerController extends Controller
         Redirector $redirect,
         UploadRequest $request,
         AjaxUploadRequest $ajaxRequest,
-        FileManager $file
+        FileManager $file,
+        Configuration $config
     ) {
         $this->flash = $flash;
         $this->redirect = $redirect;
         $this->request = $request;
         $this->ajaxRequest = $ajaxRequest;
         $this->file = $file;
+        $this->config = $config;
     }
 
 
@@ -115,8 +121,8 @@ class FilemanagerController extends Controller
 
     private function ajaxUpload()
     {
-        $file = $this->ajaxRequest->file(Config::get('filemanager::config.file_name'));
-        $params = $this->ajaxRequest->get(Config::get('filemanager::config.file_params_directory'));
+        $file = $this->ajaxRequest->file($this->config->get('filemanager::config.file_name'));
+        $params = $this->ajaxRequest->get($this->config->get('filemanager::config.file_params_directory'));
         $type = $this->findFileType($file);
         $file = $this->file->make($file, $type, $params)->variant([
             'resize' =>
@@ -144,6 +150,7 @@ class FilemanagerController extends Controller
             }
         }
     }
+
     private function syncUpload()
     {
         $input = $this->request->all();

@@ -11,7 +11,9 @@ Listing des thumbs
 </th>
 <th>
 {{trans('filemanager::form.variants_name')}}
-
+</th>
+<th>
+{{trans('filemanager::form.actions')}}
 </th>
 </tr>
         <tr>
@@ -30,6 +32,14 @@ Listing des thumbs
         </td>
         <?php endforeach; ?>
     <?php endforeach; ?>
+    <td>
+     <?php foreach($thumbs as $module => $data): ?>
+     <?php foreach($data as $thumb => $value): ?>
+
+        <a href="{{route('filemanager.thumb.edit',array('module'=>$module,'thumb'=>$thumb))}}">Edit</a>
+        <?php endforeach; ?>
+        <?php endforeach; ?>
+    </td>
         </tr>
 <?php endif; ?>
 </table>

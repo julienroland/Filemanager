@@ -24,6 +24,12 @@ class OutputFileForm extends FileForm
         return $this->outputInputFileTemplate($type, $params, $type2);
     }
 
+    public function createThumbForm($defaultValue)
+    {
+        $thumbsProperties = $this->config->get('filemanager::config.available_thumb');
+        return $this->outputThumbFormTemplate($thumbsProperties, $defaultValue);
+    }
+
     public function createInputHidden($formName, $params)
     {
         echo $this->outputHiddenFieldTemplate(null, $params, null, $formName);
@@ -65,7 +71,7 @@ class OutputFileForm extends FileForm
     private function outputButtonLibraryTemplate($type, $type2, $formName, $label)
     {
         if (is_null($label)) {
-            $label = trans('filemanager::form.library');
+            $label = trans('filemanager::library.upload_file');
         }
 
         if (is_null($formName)) {
@@ -109,6 +115,7 @@ class OutputFileForm extends FileForm
             }
 
         }
+
         return $inputHidden;
     }
 
@@ -133,4 +140,41 @@ class OutputFileForm extends FileForm
         }
     }
 
+    private function outputThumbFormTemplate($thumbsProperties, $defaultValue)
+    {
+        if (!is_null($defaultValue)) {
+            //TODO : Afficher les valeurs par défault dans les foreach
+        }
+        $thumbsForm = '';
+        foreach ($thumbsProperties as $variantName => $properties) {
+            $thumbsForm .= '<fieldset>';
+            $thumbsForm .= '<legend>' . $properties['legend'] . '</legend>';
+            foreach ($properties['form'] as $propertyName => $formProperties) {
+                if (isset($defaultValue[$variantName][$propertyName])) {
+                    if ($defaultValue[$variantName][$propertyName] == "on") {
+                        $value = null;
+                        $checked = 'checked';
+                    } else {
+                        $value = $defaultValue[$variantName][$propertyName];
+                        $checked = '';
+                    }
+                } else {
+                    $value = null;
+                    $checked = '';
+                }
+                $thumbsForm .= '<div class="field">';
+                $attributes = '';
+                if (isset($formProperties['attr'])) {
+                    foreach ($formProperties['attr'] as $attr => $val) {
+                        $attributes .= $attr . '="' . $val . '"';
+                    }
+                }
+                $thumbsForm .= '<label for="variant[' . $variantName . '][' . $propertyName . ']">' . $formProperties['label'] . '</label>';
+                $thumbsForm .= '<input ' . $checked . ' value="' . $value . '" type="' . $formProperties['type'] . '" ' . $attributes . '/>';
+                $thumbsForm .= '</div>';
+            }
+            $thumbsForm .= '</fieldset>';
+        }
+        echo $thumbsForm;
+    }
 }
