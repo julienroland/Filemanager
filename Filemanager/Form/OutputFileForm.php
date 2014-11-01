@@ -19,9 +19,9 @@ class OutputFileForm extends FileForm
         $this->config = $config;
     }
 
-    public function createInputFile($type, $params = null, $type2 = null)
+    public function createInputFile($type, $name = null, $params = null, $type2 = null)
     {
-        return $this->outputInputFileTemplate($type, $params, $type2);
+        return $this->outputInputFileTemplate($type, $name, $params, $type2);
     }
 
     public function createThumbForm($defaultValue)
@@ -55,9 +55,9 @@ class OutputFileForm extends FileForm
         echo '<script type="text/javascript"> var button = document.getElementById("' . $button . '"); button.addEventListener("click",function(){ window.open("/filemanager/library");})</script>';
     }
 
-    protected function outputInputFileTemplate($type, $params = null, $type2)
+    protected function outputInputFileTemplate($type, $name, $params = null, $type2)
     {
-        echo $this->openTag() . $this->inputTag() . ' ' . $this->type() . ' ' . $this->name() . ' ' . $this->params($params) . ' ' . $this->classes('hidden') . ' ' . $this->id() . ' ' . $this->inlineCloseTag();
+        echo $this->openTag() . $this->inputTag() . ' ' . $this->type() . ' ' . $this->name($name) . ' ' . $this->params($params) . ' ' . $this->classes('hidden') . ' ' . $this->id() . ' ' . $this->inlineCloseTag();
         echo $this->outputHiddenFieldTemplate($type, $params, $type2);
     }
 
@@ -142,9 +142,6 @@ class OutputFileForm extends FileForm
 
     private function outputThumbFormTemplate($thumbsProperties, $defaultValue)
     {
-        if (!is_null($defaultValue)) {
-            //TODO : Afficher les valeurs par défault dans les foreach
-        }
         $thumbsForm = '';
         foreach ($thumbsProperties as $variantName => $properties) {
             $thumbsForm .= '<fieldset>';

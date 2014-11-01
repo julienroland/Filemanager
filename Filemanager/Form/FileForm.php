@@ -35,8 +35,11 @@ class FileForm
         return $tag;
     }
 
-    protected function name()
+    protected function name($name = null)
     {
+        if (!is_null($name)) {
+            return 'name="' . $name . '"';
+        }
         return 'name="' . Config::get('filemanager::config.file_name') . '"';
     }
 
@@ -66,7 +69,8 @@ class FileForm
 
     protected function id($id = null)
     {
-        $id = is_null($id) ? $this->config->get('filemanager::config.file_name') : $id;
+
+        $id = is_null($id) ? Config::get('filemanager::config.file_name') : $id;
         return 'id = "' . $id . '"';
     }
 

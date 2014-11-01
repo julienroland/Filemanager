@@ -3,6 +3,7 @@
 use Illuminate\Foundation\AliasLoader;
 use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
+use Modules\Filemanager\Filemanager\Form\FormDriver;
 use Modules\Filemanager\Filemanager\Form\OutputFileForm;
 use Modules\Filemanager\Filemanager\TemplateFileUpload;
 
@@ -101,8 +102,8 @@ class FilemanagerServiceProvider extends ServiceProvider
             'Modules\Filemanager\Repositories\ImageIntervention\ImageInterventionImageManipulationRepository'
         );
         $this->app->bind(
-            'Modules\Filemanager\Repositories\ImageManagerRepository',
-            'Modules\Filemanager\Repositories\ImageIntervention\ImageInterventionImageManagerRepository'
+            'Modules\Filemanager\Repositories\ImageRepository',
+            'Modules\Filemanager\Repositories\ImageIntervention\ImageInterventionImageRepository'
         );
         $this->app->bind(
             'Modules\Filemanager\Repositories\FilesystemRepository',
@@ -118,7 +119,8 @@ class FilemanagerServiceProvider extends ServiceProvider
     {
         $this->app->bind('templatefileupload', function () use ($app) {
             return new TemplateFileUpload(
-                new OutputFileForm($app['config'])
+                new OutputFileForm($app['config']),
+                new FormDriver
             );
         });
     }

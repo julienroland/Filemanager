@@ -1,6 +1,6 @@
 <?php  namespace Modules\Filemanager\Filemanager;
 
-use Illuminate\Config\Repository as Configuration;
+use Illuminate\Support\Facades\Config;
 
 abstract class AbstractFileManager
 {
@@ -41,11 +41,6 @@ abstract class AbstractFileManager
      */
     private $config;
 
-    public function __construct(Configuration $config)
-    {
-
-        $this->config = $config;
-    }
 
     protected function setImage($image)
     {
@@ -76,7 +71,7 @@ abstract class AbstractFileManager
      */
     protected function getFolderDir()
     {
-        return public_path() . '/' . $this->config->get('filemanager::config.folder_dir');
+        return public_path() . '/' . Config::get('filemanager::config.folder_dir');
     }
 
     protected function setToday()

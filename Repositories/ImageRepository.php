@@ -1,8 +1,6 @@
 <?php namespace Modules\Filemanager\Repositories;
 
-// Modules\Filemanager\Filemanager\Image\ImageManipulation
-
-interface ImageManagerRepository
+interface ImageRepository
 {
     public function make($file);
 

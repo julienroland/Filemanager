@@ -1,9 +1,9 @@
 <?php  namespace Modules\Filemanager\Repositories\ImageIntervention;
 
 use Intervention\Image\ImageManager as ImageIntervention;
-use Modules\Filemanager\Repositories\ImageManagerRepository;
+use Modules\Filemanager\Repositories\ImageRepository;
 
-class ImageInterventionImageManagerRepository implements ImageManagerRepository
+class ImageInterventionImageRepository implements ImageRepository
 {
     /**
      * @var ImageIntervention

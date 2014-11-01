@@ -1,11 +1,11 @@
 <?php namespace Modules\Filemanager\Filemanager\Image;
 
 use Modules\Filemanager\Filemanager\DatabaseDriver\DatabaseDriver;
-use Modules\Filemanager\Filemanager\FileProvider;
 use Illuminate\Contracts\Filesystem\Factory as Filesystem;
 use Modules\Filemanager\Repositories\ImageManagerRepository;
+use Modules\Filemanager\Repositories\ImageRepository;
 
-class ImageManager extends FileProvider
+class Image
 {
     private $image_quality = 100;
     /**
@@ -20,8 +20,13 @@ class ImageManager extends FileProvider
      * @var Filesystem
      */
     private $filesystem;
+    /**
+     * @var AbstractImageDriver
+     */
+    private $driver;
 
     /**
+     * @param AbstractImageDriver $driver
      * @param ImageManipulation $imageManipulation
      * @param ImageIntervention|ImageManagerRepository $image
      * @param Filesystem $filesystem
@@ -29,7 +34,7 @@ class ImageManager extends FileProvider
      */
     public function __construct(
         ImageManipulation $imageManipulation,
-        ImageManagerRepository $image,
+        ImageRepository $image,
         Filesystem $filesystem,
         DatabaseDriver $database
     ) {
@@ -39,6 +44,13 @@ class ImageManager extends FileProvider
         $this->database = $database;
     }
 
+    public function __call($name, $options)
+    {
+        dd($name.' '.$options);
+        $command = $this->driver->executeVariant($this, $name, $options);
+        return $command->hasOutput() ? $command->getOutput() : $this;
+    }
+
     public function make($file)
     {
         return $this->image->make($file);
@@ -46,7 +58,6 @@ class ImageManager extends FileProvider
 
     public function save($file, $path, $type, $variant, $provider = null)
     {
-
         if ($this->isDirectory($type)) {
             return $this->directorySave($file, $path, $provider);
         }
@@ -56,10 +67,30 @@ class ImageManager extends FileProvider
 
     }
 
-    public function resize($file, $options)
+    public function variant($variant)
+    {
+        $variantClass = $this->manipulationPath . ucfirst($variant);
+        return new $variantClass;
+    }
+
+    public function variants($image, $variants)
+    {
+        if (is_array($variants)) {
+            foreach ($variants as $variant => $variantValue) {
+                $variantClass = $this->manipulationPath . ucfirst($variant);
+                $image = new $variantClass($image, $variantValue);
+            }
+            return $image;
+
+        } else {
+            return $this->variant($variants);
+        }
+    }
+
+  /*  public function resize($file, $options)
     {
         return $this->imageManipulation->resize($file, $options);
-    }
+    }*/
 
     private function getFilePathWithProvider($path, $provider)
     {

@@ -5,7 +5,7 @@ use Illuminate\Filesystem\Filesystem as Filesystem;
 use Illuminate\Config\Repository as Configuration;
 use Illuminate\Support\Str;
 use Illuminate\Contracts\Filesystem\Factory as Flysystem;
-use Modules\Filemanager\Filemanager\Image\ImageManager;
+use Modules\Filemanager\Filemanager\Image\Image;
 use Modules\Filemanager\Http\Requests\UploadRequest;
 
 
@@ -17,7 +17,7 @@ class FileManager extends AbstractFileManager
     public function __construct(
         Flysystem $flysystem,
         Filesystem $filesystem,
-        ImageManager $image,
+        Image $image,
         Carbon $date,
         Str $string,
         Configuration $config
@@ -71,6 +71,8 @@ class FileManager extends AbstractFileManager
         foreach ($variants as $key => $variant) {
             $this->{$key}($variant);
         }
+        $this->file = $this->image->variants($this->file, $variants);
+        dd($this);
         return $this;
     }
 
