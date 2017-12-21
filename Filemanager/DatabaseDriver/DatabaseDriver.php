@@ -59,11 +59,9 @@ class DatabaseDriver
             if (!is_null($params)) {
                 $this->attachFileToFolder($file, $params);
             }
-
         }
 
         return $this->file->find($file->id);
-
     }
 
     private function getAccessType($provider)
@@ -104,7 +102,6 @@ class DatabaseDriver
             'user_id' => $user,
             'file_type_id' => $this->getFileType($file->type),
         ]);
-
     }
 
     private function createVariant($file, $path, $provider)

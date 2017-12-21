@@ -138,5 +138,4 @@ class Filesystem
     {
         return $this->file->cleanDirectory($directory);
     }
-
 }

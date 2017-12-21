@@ -32,7 +32,5 @@ class FlysystemDriver extends FilesystemManager
     {
         return $this->app['config']['services'][$name];
         //return $this->app['config']["filesystems.disks.{$name}"];
-
     }
-
 }
